@@ -107,7 +107,7 @@ const Form = () => {
           maxLength={100}
           pattern="^[a-zA-ZğüşıöçĞÜŞİÖÇ\s]+$"
           title="Lütfen sadece harf kullanın"
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
         />
       </div>
 
@@ -125,7 +125,7 @@ const Form = () => {
           maxLength={100}
           pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
           title="Lütfen geçerli bir e-posta adresi girin"
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
         />
       </div>
 
@@ -142,7 +142,7 @@ const Form = () => {
           required
           minLength={2}
           maxLength={200}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
         />
       </div>
 
@@ -159,7 +159,7 @@ const Form = () => {
           required
           minLength={10}
           maxLength={1000}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
         />
       </div>
 
@@ -167,7 +167,7 @@ const Form = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+          className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${
             isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
           }`}
         >

@@ -9,8 +9,8 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-blue-600 text-white py-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800 opacity-90"></div>
+      <section className="relative bg-purple-600 text-white py-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-800 opacity-90"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
           <FadeIn direction="up" duration={0.8}>
             <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">
@@ -29,7 +29,7 @@ export default function Home() {
               <HoverScale>
                 <Link
                   href="/hakkimizda"
-                  className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition duration-300"
+                  className="bg-white text-purple-600 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition duration-300"
                 >
                   Hakkımızda
                 </Link>
@@ -37,7 +37,7 @@ export default function Home() {
               <HoverScale>
                 <Link
                   href="/iletisim"
-                  className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-md font-medium transition duration-300"
+                  className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-600 px-6 py-3 rounded-md font-medium transition duration-300"
                 >
                   Bize Ulaşın
                 </Link>
@@ -53,7 +53,7 @@ export default function Home() {
           <AnimatedSection>
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Misyonumuz ve Vizyonumuz</h2>
-              <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+              <div className="w-20 h-1 bg-purple-600 mx-auto"></div>
             </div>
           </AnimatedSection>
 

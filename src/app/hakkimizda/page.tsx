@@ -6,7 +6,7 @@ import AnimatedSection from '@/components/animations/AnimatedSection';
 
 export default function AboutPage() {
   return (
-    <div className="py-16 px-4 sm:px-6 lg:px-8">
+    <div className="py-16 px-4 sm:px-6 lg:px-8 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto">
         <FadeIn direction="up" duration={0.8}>
           <div className="text-center mb-16">

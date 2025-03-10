@@ -59,7 +59,7 @@ export default function AnnouncementsPage() {
   }, []);
 
   return (
-    <div className="py-16 px-4 sm:px-6 lg:px-8">
+    <div className="py-16 px-4 sm:px-6 lg:px-8 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Duyurular</h1>
@@ -70,7 +70,7 @@ export default function AnnouncementsPage() {
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
           </div>
         ) : error ? (
           <div className="bg-red-50 text-red-800 p-4 rounded-md mb-8">
@@ -87,7 +87,7 @@ export default function AnnouncementsPage() {
                 <p className="text-gray-600 mb-4">{announcement.summary}</p>
                 <Link
                   href={`/duyurular/${announcement.id}`}
-                  className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+                  className="inline-flex items-center text-purple-600 hover:text-purple-800 font-medium"
                 >
                   Devamını Oku
                   <svg

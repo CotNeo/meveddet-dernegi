@@ -8,7 +8,7 @@ interface BannerProps {
   description?: string;
   buttonText?: string;
   buttonLink?: string;
-  color?: 'blue' | 'green' | 'yellow' | 'red';
+  color?: 'purple' | 'blue' | 'green' | 'yellow' | 'red';
   icon?: ReactNode;
   dismissible?: boolean;
 }
@@ -18,7 +18,7 @@ const Banner = ({
   description,
   buttonText,
   buttonLink,
-  color = 'blue',
+  color = 'purple',
   icon,
   dismissible = true,
 }: BannerProps) => {
@@ -28,6 +28,13 @@ const Banner = ({
 
   // Color variants
   const colorVariants = {
+    purple: {
+      bg: 'bg-purple-600',
+      hoverBg: 'hover:bg-purple-700',
+      buttonBg: 'bg-white',
+      buttonText: 'text-purple-600',
+      buttonHover: 'hover:bg-purple-50',
+    },
     blue: {
       bg: 'bg-blue-600',
       hoverBg: 'hover:bg-blue-700',

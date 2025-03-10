@@ -90,10 +90,10 @@ export default function AnnouncementDetailPage() {
 
   if (loading) {
     return (
-      <div className="py-16 px-4 sm:px-6 lg:px-8">
+      <div className="py-16 px-4 sm:px-6 lg:px-8 bg-white min-h-screen">
         <div className="max-w-3xl mx-auto">
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
           </div>
         </div>
       </div>
@@ -102,12 +102,12 @@ export default function AnnouncementDetailPage() {
 
   if (error || !announcement) {
     return (
-      <div className="py-16 px-4 sm:px-6 lg:px-8">
+      <div className="py-16 px-4 sm:px-6 lg:px-8 bg-white min-h-screen">
         <div className="max-w-3xl mx-auto">
           <div className="bg-red-50 text-red-800 p-4 rounded-md mb-8">
             {error || 'Duyuru bulunamadı.'}
           </div>
-          <Link href="/duyurular" className="text-blue-600 hover:text-blue-800 font-medium">
+          <Link href="/duyurular" className="text-purple-600 hover:text-purple-800 font-medium">
             ← Tüm Duyurulara Dön
           </Link>
         </div>
@@ -116,10 +116,10 @@ export default function AnnouncementDetailPage() {
   }
 
   return (
-    <div className="py-16 px-4 sm:px-6 lg:px-8">
+    <div className="py-16 px-4 sm:px-6 lg:px-8 bg-white min-h-screen">
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
-          <Link href="/duyurular" className="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">
+          <Link href="/duyurular" className="text-purple-600 hover:text-purple-800 font-medium inline-flex items-center">
             <svg
               className="w-4 h-4 mr-1"
               fill="none"
