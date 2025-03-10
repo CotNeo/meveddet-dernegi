@@ -21,7 +21,7 @@ Bu proje, Meveddet Derneği için geliştirilmiş modern ve kullanıcı dostu bi
 
 1. Projeyi klonlayın:
 ```bash
-git clone [repo-url]
+git clone [https://github.com/CotNeo/meveddet-dernegi.git]
 cd meveddet-next
 ```
 
@@ -118,4 +118,4 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 Meveddet Derneği - [info@meveddetdernegi.org](mailto:info@meveddetdernegi.org)
 
-Proje Linki: [https://github.com/username/meveddet-next](https://github.com/username/meveddet-next)
+Proje Linki: (https://github.com/CotNeo/meveddet-dernegi)
