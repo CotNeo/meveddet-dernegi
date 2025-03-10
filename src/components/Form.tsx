@@ -1,10 +1,21 @@
-
 'use client';
 
 import { useState } from 'react';
 
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface SubmitStatus {
+  success: boolean;
+  message: string;
+}
+
 const Form = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     subject: '',
@@ -12,10 +23,7 @@ const Form = () => {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -56,13 +64,11 @@ const Form = () => {
         subject: '',
         message: '',
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Form gönderme hatası:', error);
       setSubmitStatus({
         success: false,
-        message: error.message || 'Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
+        message: error instanceof Error ? error.message : 'Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
       });
     } finally {
       setIsSubmitting(false);
