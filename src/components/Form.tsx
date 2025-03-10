@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
@@ -56,7 +57,6 @@ const Form = () => {
         throw new Error(data.error || 'Bir hata oluştu');
       }
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setSubmitStatus({
         success: true,
         message: data.message || 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.',
