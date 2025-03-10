@@ -45,25 +45,12 @@ async function getAnnouncements(): Promise<Announcement[]> {
     return [
       {
         id: 1,
-        title: 'Yardım Kampanyası Başladı',
-        date: '15 Mart 2023',
-        summary: 'İhtiyaç sahiplerine yardım etmek için yeni kampanyamız başladı. Detaylı bilgi için tıklayın.',
-        content: 'İhtiyaç sahiplerine yardım etmek için yeni kampanyamız başladı. Bu kampanya kapsamında toplanan yardımlar, ihtiyaç sahiplerine ulaştırılacaktır. Katkıda bulunmak için derneğimize ulaşabilirsiniz.'
+        title: 'Güncel Duyurular',
+        date: ' Mart 2025',
+        summary: 'Açılış.',
+        content: 'Açılış.'
       },
-      {
-        id: 2,
-        title: 'Gönüllü Toplantısı',
-        date: '20 Mart 2023',
-        summary: 'Derneğimizin gönüllüleri ile yapılacak toplantı hakkında bilgilendirme.',
-        content: 'Derneğimizin gönüllüleri ile yapılacak toplantı 20 Mart 2023 tarihinde dernek merkezimizde gerçekleştirilecektir. Tüm gönüllülerimizin katılımını bekliyoruz.'
-      },
-      {
-        id: 3,
-        title: 'Eğitim Desteği Projesi',
-        date: '25 Mart 2023',
-        summary: 'Öğrencilere eğitim desteği sağlamak için başlattığımız yeni projemiz hakkında bilgi.',
-        content: 'Öğrencilere eğitim desteği sağlamak için başlattığımız yeni projemiz kapsamında, ihtiyaç sahibi öğrencilere kitap, kırtasiye ve teknolojik ekipman desteği sağlanacaktır. Detaylı bilgi için derneğimize ulaşabilirsiniz.'
-      }
+      
     ];
   }
   
