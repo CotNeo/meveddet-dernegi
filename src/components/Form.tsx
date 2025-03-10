@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -55,6 +56,8 @@ const Form = () => {
         subject: '',
         message: '',
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     } catch (error: any) {
       console.error('Form gönderme hatası:', error);
       setSubmitStatus({
