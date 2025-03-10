@@ -1,101 +1,88 @@
-import Image from "next/image";
+'use client';
+
+import Link from 'next/link';
+import FadeIn from '@/components/animations/FadeIn';
+import AnimatedSection from '@/components/animations/AnimatedSection';
+import HoverScale from '@/components/animations/HoverScale';
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <section className="relative bg-blue-600 text-white py-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-800 opacity-90"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+          <FadeIn direction="up" duration={0.8}>
+            <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">
+              Meveddet Derneği
+            </h1>
+          </FadeIn>
+          <FadeIn direction="up" delay={0.2} duration={0.8}>
+            <p className="text-xl md:text-2xl text-center mb-10 max-w-3xl">
+            Meveddet Derneği olarak, tasavvuf tarihini ve kültürünü araştırarak, 
+            doğru kaynaklarla tanıtmak ve gelecek nesillere aktarmak için çalışıyoruz.
+             Sevgi, saygı ve muhabbet temellerine dayanan bir anlayışla, manevi mirasımızın korunmasını sağlamayı amaçlıyoruz.
+            </p>
+          </FadeIn>
+          <FadeIn direction="up" delay={0.4} duration={0.8}>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <HoverScale>
+                <Link
+                  href="/hakkimizda"
+                  className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition duration-300"
+                >
+                  Hakkımızda
+                </Link>
+              </HoverScale>
+              <HoverScale>
+                <Link
+                  href="/iletisim"
+                  className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-md font-medium transition duration-300"
+                >
+                  Bize Ulaşın
+                </Link>
+              </HoverScale>
+            </div>
+          </FadeIn>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Misyon ve Vizyon */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Misyonumuz ve Vizyonumuz</h2>
+              <div className="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+          </AnimatedSection>
+
+          <div className="grid md:grid-cols-2 gap-12">
+            <AnimatedSection delay={0.2}>
+              <div className="bg-white p-8 rounded-lg shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Misyonumuz</h3>
+                <p className="text-gray-600">
+                Meveddet Derneği olarak, tasavvuf tarihini ve kültürünü araştırarak, 
+                doğru kaynaklarla tanıtmak ve gelecek nesillere aktarmak için çalışıyoruz.
+                 Sevgi, saygı ve muhabbet temellerine dayanan bir anlayışla, manevi mirasımızın korunmasını sağlamayı amaçlıyoruz.
+                </p>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.4}>
+              <div className="bg-white p-8 rounded-lg shadow-md">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Vizyonumuz</h3>
+                <p className="text-gray-600">
+                Tasavvufun evrensel değerlerini günümüz dünyasına taşıyan,
+                sevgi ve hoşgörüyü merkeze alan bir topluluk oluşturmak. 
+                Kültürel ve akademik çalışmalarla Meveddet ruhunu yaşatmak, 
+                toplumda manevi derinliği artırmak ve tasavvufun ışığını daha geniş kitlelere ulaştırmak en büyük hedefimizdir.
+                </p>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
