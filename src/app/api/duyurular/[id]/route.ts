@@ -43,9 +43,8 @@ async function saveAnnouncements(announcements: Announcement[]) {
   await fs.writeFile(dataFilePath, JSON.stringify(announcements, null, 2));
 }
 
-// GET: Belirli bir duyuruyu getir
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -78,7 +77,6 @@ export async function GET(
   }
 }
 
-// PUT: Duyuru güncelle
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
@@ -134,9 +132,8 @@ export async function PUT(
   }
 }
 
-// DELETE: Duyuru sil
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
   try {

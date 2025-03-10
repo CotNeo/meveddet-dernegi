@@ -14,6 +14,11 @@ interface SubmitStatus {
   message: string;
 }
 
+interface ApiResponse {
+  error?: string;
+  message?: string;
+}
+
 const Form = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -39,14 +44,13 @@ const Form = () => {
     setSubmitStatus(null);
 
     try {
-      // Form verilerini API'ye gönder
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data: ApiResponse = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Bir hata oluştu');
@@ -57,18 +61,18 @@ const Form = () => {
         message: data.message || 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.',
       });
       
-      // Formu sıfırla
       setFormData({
         name: '',
         email: '',
         subject: '',
         message: '',
       });
-    } catch (error: unknown) {
+    } catch (error) {
       console.error('Form gönderme hatası:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
       setSubmitStatus({
         success: false,
-        message: error instanceof Error ? error.message : 'Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
+        message: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
