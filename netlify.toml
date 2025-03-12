@@ -9,22 +9,19 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Redirect ve rewrite kuralları
+# Redirect rules for Next.js
 [[redirects]]
-  from = "/*"
+  from = "/_next/static/*"
   to = "/_next/static/:splat"
   status = 200
-  force = true
-  conditions = {Path = ["/_next/static/*"]}
 
 [[redirects]]
-  from = "/*"
-  to = "/api/:splat"
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
   status = 200
-  force = true
-  conditions = {Path = ["/api/*"]}
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200 
+  status = 200
+  force = false 

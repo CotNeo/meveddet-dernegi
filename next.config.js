@@ -8,7 +8,6 @@ const nextConfig = {
         hostname: 'via.placeholder.com',
       },
     ],
-    unoptimized: true, // Statik export için gerekli
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
@@ -18,8 +17,6 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
-  // Statik export için
-  output: 'export',
 };
 
 module.exports = nextConfig; 
