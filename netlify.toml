@@ -1,0 +1,30 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Redirect ve rewrite kuralları
+[[redirects]]
+  from = "/*"
+  to = "/_next/static/:splat"
+  status = 200
+  force = true
+  conditions = {Path = ["/_next/static/*"]}
+
+[[redirects]]
+  from = "/*"
+  to = "/api/:splat"
+  status = 200
+  force = true
+  conditions = {Path = ["/api/*"]}
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 
