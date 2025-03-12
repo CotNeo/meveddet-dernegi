@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
+import logger from '@/utils/logger';
 
 interface FormData {
   name: string;
@@ -15,11 +15,6 @@ interface SubmitStatus {
   message: string;
 }
 
-interface ApiResponse {
-  error?: string;
-  message?: string;
-}
-
 const Form = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -30,6 +25,7 @@ const Form = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -43,34 +39,103 @@ const Form = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
+    setDebugInfo(null);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      // Form verilerini kontrol et
+      if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        throw new Error('Lütfen tüm alanları doldurun.');
+      }
 
-      const data: ApiResponse = await response.json();
+      // E-posta formatını kontrol et
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Lütfen geçerli bir e-posta adresi girin.');
+      }
 
+      // Debug bilgisi
+      logger.debug('Form gönderiliyor', formData);
+
+      // API isteği
+      let response;
+      try {
+        response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+      } catch (fetchError) {
+        logger.error('Fetch hatası', fetchError);
+        throw new Error('Sunucuya bağlanırken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin.');
+      }
+
+      // Yanıt durumunu kontrol et
+      if (!response) {
+        throw new Error('Sunucudan yanıt alınamadı.');
+      }
+
+      // Debug bilgisi
+      logger.debug('API yanıt durumu', { status: response.status, statusText: response.statusText });
+      
+      // Yanıtı JSON olarak parse et
+      let data;
+      try {
+        data = await response.json();
+        logger.debug('API yanıtı', data);
+      } catch (jsonError) {
+        logger.error('JSON parse hatası', jsonError);
+        
+        // Sadece geliştirme ortamında debug bilgisini göster
+        if (process.env.NODE_ENV === 'development') {
+          setDebugInfo(`JSON parse hatası: ${response.status} ${response.statusText}`);
+        }
+        
+        throw new Error('Sunucu yanıtı işlenirken bir hata oluştu.');
+      }
+
+      // Başarısız yanıt durumunu kontrol et
       if (!response.ok) {
-        throw new Error(data.error || 'Bir hata oluştu');
+        // Hata mesajını güvenli bir şekilde al
+        const errorMessage = data && typeof data === 'object' && data.error 
+          ? data.error 
+          : `Sunucu hatası: ${response.status} ${response.statusText}`;
+        
+        // Sadece geliştirme ortamında debug bilgisini göster
+        if (process.env.NODE_ENV === 'development') {
+          setDebugInfo(`Sunucu hatası: ${response.status} ${response.statusText}`);
+        }
+        
+        throw new Error(errorMessage);
       }
       
+      // Başarı mesajını güvenli bir şekilde al
+      const successMessage = data && typeof data === 'object' && data.message
+        ? data.message
+        : 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.';
+      
+      // Başarılı form gönderimi
       setSubmitStatus({
         success: true,
-        message: data.message || 'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.',
+        message: successMessage,
       });
       
+      // Formu temizle
       setFormData({
         name: '',
         email: '',
         subject: '',
         message: '',
       });
+
+      logger.info('Form başarıyla gönderildi');
     } catch (error) {
-      console.error('Form gönderme hatası:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+      logger.error('Form gönderme hatası', error);
+      
+      // Hata mesajını ayarla
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Mesajınız gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+      
       setSubmitStatus({
         success: false,
         message: errorMessage,
@@ -92,6 +157,14 @@ const Form = () => {
         </div>
       )}
 
+      {/* Debug bilgisi sadece geliştirme ortamında gösterilir */}
+      {debugInfo && process.env.NODE_ENV === 'development' && (
+        <div className="p-4 rounded-md bg-yellow-50 text-yellow-800 text-sm">
+          <p className="font-bold">Debug Bilgisi:</p>
+          <p>{debugInfo}</p>
+        </div>
+      )}
+
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
           Ad Soyad
@@ -100,6 +173,7 @@ const Form = () => {
           type="text"
           id="name"
           name="name"
+          autoComplete="name"
           value={formData.name}
           onChange={handleChange}
           required
@@ -119,6 +193,7 @@ const Form = () => {
           type="email"
           id="email"
           name="email"
+          autoComplete="email"
           value={formData.email}
           onChange={handleChange}
           required
@@ -137,6 +212,7 @@ const Form = () => {
           type="text"
           id="subject"
           name="subject"
+          autoComplete="off"
           value={formData.subject}
           onChange={handleChange}
           required
@@ -154,6 +230,7 @@ const Form = () => {
           id="message"
           name="message"
           rows={4}
+          autoComplete="off"
           value={formData.message}
           onChange={handleChange}
           required

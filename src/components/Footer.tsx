@@ -18,7 +18,8 @@ const Footer = () => {
           <div>
             <div className="flex items-center mb-4">
               <Image 
-                src="/logo.png" 
+                src="/logo_transparent.png"
+                 
                 alt="Meveddet Derneği Logo" 
                 width={50} 
                 height={50} 

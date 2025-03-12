@@ -45,6 +45,8 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
             <input
               type="text"
               id="username"
+              name="username"
+              autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -59,6 +61,8 @@ const AdminLogin = ({ onLogin }: AdminLoginProps) => {
             <input
               type="password"
               id="password"
+              name="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

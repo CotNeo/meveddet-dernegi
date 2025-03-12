@@ -1,121 +1,131 @@
 # Meveddet Derneği Web Sitesi
 
-Bu proje, Meveddet Derneği için geliştirilmiş modern ve kullanıcı dostu bir web sitesidir. Next.js ve TailwindCSS kullanılarak oluşturulmuştur.
+Bu proje, Meveddet Derneği için Next.js, TypeScript ve Tailwind CSS kullanılarak geliştirilmiş bir web sitesidir.
 
-## 🚀 Özellikler
+## Özellikler
 
-- 📱 Responsive tasarım
-- 📢 Duyuru yönetim sistemi
-- 📧 İletişim formu
-- 🔐 Admin paneli
-- 🎨 Modern ve kullanıcı dostu arayüz
+- Duyuru yönetimi
+- İletişim formu
+- Admin paneli
+- Responsive tasarım
+- SEO optimizasyonu
 
-## 🛠️ Teknolojiler
+## Gereksinimler
 
-- [Next.js 14](https://nextjs.org/) - React framework
-- [TailwindCSS](https://tailwindcss.com/) - CSS framework
-- [TypeScript](https://www.typescriptlang.org/) - Tip güvenliği
-- [Nodemailer](https://nodemailer.com/) - E-posta gönderimi
+- Node.js 18.0.0 veya üzeri
+- npm veya yarn
 
-## 📦 Kurulum
+## Kurulum
 
 1. Projeyi klonlayın:
 ```bash
-git clone [https://github.com/CotNeo/meveddet-dernegi.git]
-cd meveddet-next
+git clone https://github.com/kullanici-adi/meveddet-dernegi.git
+cd meveddet-dernegi
 ```
 
 2. Bağımlılıkları yükleyin:
 ```bash
 npm install
+# veya
+yarn install
 ```
 
 3. Ortam değişkenlerini ayarlayın:
-```bash
-# .env.local dosyası oluşturun
-cp .env.example .env.local
+   - `.env.local` dosyasını oluşturun (geliştirme ortamı için)
+   - `.env.production` dosyasını oluşturun (üretim ortamı için)
 
-# Aşağıdaki değişkenleri ayarlayın:
-# E-posta ayarları
+Örnek `.env.local` dosyası:
+```
 EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=your-app-specific-password
-
-# Admin girişi
 NEXT_PUBLIC_ADMIN_USERNAME=admin
-NEXT_PUBLIC_ADMIN_PASSWORD=your-password
+NEXT_PUBLIC_ADMIN_PASSWORD=admin123
+LOG_LEVEL=debug
 ```
 
-4. Geliştirme sunucusunu başlatın:
+Örnek `.env.production` dosyası:
+```
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-specific-password
+NEXT_PUBLIC_ADMIN_USERNAME=secure-username
+NEXT_PUBLIC_ADMIN_PASSWORD=secure-password
+LOG_LEVEL=error
+```
+
+## Geliştirme
+
+Geliştirme sunucusunu başlatmak için:
+
 ```bash
 npm run dev
+# veya
+yarn dev
 ```
 
-## 📁 Proje Yapısı
+Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresini açarak uygulamayı görüntüleyebilirsiniz.
+
+## Derleme ve Dağıtım
+
+Uygulamayı üretim için derlemek için:
+
+```bash
+npm run build
+# veya
+yarn build
+```
+
+Derlenen uygulamayı çalıştırmak için:
+
+```bash
+npm run start
+# veya
+yarn start
+```
+
+### Statik Dağıtım (Opsiyonel)
+
+Eğer statik bir site olarak dağıtmak istiyorsanız, `next.config.js` dosyasında `output: 'export'` seçeneğini etkinleştirin ve aşağıdaki komutu çalıştırın:
+
+```bash
+npm run build
+# veya
+yarn build
+```
+
+Bu işlem `out` klasöründe statik dosyaları oluşturacaktır. Bu klasörü herhangi bir statik site barındırma hizmetine (Netlify, Vercel, GitHub Pages vb.) yükleyebilirsiniz.
+
+## Admin Paneli
+
+Admin paneline erişmek için:
+
+1. [http://localhost:3000/admin](http://localhost:3000/admin) adresine gidin
+2. `.env` dosyasında belirttiğiniz kullanıcı adı ve şifreyi kullanarak giriş yapın
+
+Admin panelinde şunları yapabilirsiniz:
+- Duyuruları yönetme (ekleme, düzenleme, silme)
+- İletişim formundan gelen mesajları görüntüleme ve silme
+
+## Proje Yapısı
 
 ```
-meveddet-next/
+meveddet-dernegi/
+├── public/            # Statik dosyalar
 ├── src/
-│   ├── app/                    # Sayfa bileşenleri
-│   │   ├── admin/             # Admin paneli
-│   │   ├── api/               # API endpoint'leri
-│   │   ├── duyurular/         # Duyurular sayfası
-│   │   ├── hakkimizda/        # Hakkımızda sayfası
-│   │   └── iletisim/         # İletişim sayfası
-│   ├── components/            # Yeniden kullanılabilir bileşenler
-│   └── styles/               # Global stiller
-├── public/                   # Statik dosyalar
-└── data/                    # JSON veri dosyaları
+│   ├── app/           # App Router sayfaları ve API rotaları
+│   ├── components/    # React bileşenleri
+│   ├── styles/        # CSS dosyaları
+│   ├── types/         # TypeScript tip tanımlamaları
+│   └── utils/         # Yardımcı fonksiyonlar
+├── .env.local         # Geliştirme ortamı değişkenleri
+├── .env.production    # Üretim ortamı değişkenleri
+├── next.config.js     # Next.js yapılandırması
+└── tailwind.config.js # Tailwind CSS yapılandırması
 ```
 
-## 🔧 API Endpoint'leri
+## Lisans
 
-### Duyurular API
+Bu proje [MIT](LICENSE) lisansı altında lisanslanmıştır.
 
-- ```GET /api/duyurular``` - Tüm duyuruları listele
-- ```POST /api/duyurular``` - Yeni duyuru ekle
-- ```GET /api/duyurular/[id]``` - Belirli bir duyuruyu getir
-- ```PUT /api/duyurular/[id]``` - Duyuru güncelle
-- ```DELETE /api/duyurular/[id]``` - Duyuru sil
+## İletişim
 
-### İletişim API
-
-- ```POST /api/contact``` - İletişim formu gönderimi
-
-## 👥 Admin Paneli
-
-Admin paneline erişim için:
-1. ```/admin``` sayfasına gidin
-2. Kullanıcı adı ve şifre ile giriş yapın
-3. Duyuruları yönetin (ekle, düzenle, sil)
-
-## 📧 E-posta Ayarları
-
-İletişim formunun çalışması için Gmail hesabınızda şu adımları izleyin:
-1. Google Hesap Ayarları > Güvenlik > 2 Adımlı Doğrulama'yı etkinleştirin
-2. Uygulama Şifreleri > Diğer > Next.js Web uygulaması için şifre oluşturun
-3. Oluşturulan şifreyi ```.env.local``` dosyasında ```EMAIL_PASS``` olarak kullanın
-
-## 🔒 Güvenlik
-
-- Admin paneli oturum yönetimi
-- Form doğrulamaları
-- API endpoint güvenliği
-- Hata yönetimi ve loglama
-
-## 📝 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## 🤝 Katkıda Bulunma
-
-1. Fork'layın
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
-4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
-5. Pull Request oluşturun
-
-## 📞 İletişim
-
-Meveddet Derneği - [info@meveddetdernegi.org](mailto:info@meveddetdernegi.org)
-
-Proje Linki: (https://github.com/CotNeo/meveddet-dernegi)
+Sorularınız veya geri bildirimleriniz için [email@example.com](mailto:email@example.com) adresine e-posta gönderebilirsiniz.

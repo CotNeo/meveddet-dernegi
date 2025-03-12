@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -67,12 +67,17 @@ async function saveAnnouncements(announcements: Announcement[]) {
   await fs.writeFile(dataFilePath, JSON.stringify(announcements, null, 2));
 }
 
-export async function GET(
-  _request: Request,
-  { params }: { params: { id: string } }
-) {
+// URL'den ID parametresini alma yardımcı fonksiyonu
+function getIdFromUrl(request: NextRequest): number {
+  const url = new URL(request.url);
+  const pathParts = url.pathname.split('/');
+  const idStr = pathParts[pathParts.length - 1];
+  return parseInt(idStr);
+}
+
+export async function GET(request: NextRequest) {
   try {
-    const id = parseInt(params.id);
+    const id = getIdFromUrl(request);
 
     if (isNaN(id)) {
       return NextResponse.json(
@@ -101,12 +106,9 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest) {
   try {
-    const id = parseInt(params.id);
+    const id = getIdFromUrl(request);
     
     if (isNaN(id)) {
       return NextResponse.json(
@@ -164,12 +166,9 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest) {
   try {
-    const id = parseInt(params.id);
+    const id = getIdFromUrl(request);
 
     if (isNaN(id)) {
       return NextResponse.json(

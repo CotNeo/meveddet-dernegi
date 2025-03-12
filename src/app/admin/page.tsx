@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminLogin from '@/components/AdminLogin';
 import AnnouncementManager from '@/components/AnnouncementManager';
+import ContactMessageManager from '@/components/ContactMessageManager';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [activeTab, setActiveTab] = useState('announcements'); // 'announcements' veya 'messages'
   const router = useRouter();
 
   useEffect(() => {
@@ -44,7 +46,37 @@ export default function AdminPage() {
                 Çıkış Yap
               </button>
             </div>
-            <AnnouncementManager />
+            
+            {/* Sekme Menüsü */}
+            <div className="flex border-b mb-6">
+              <button
+                className={`py-2 px-4 font-medium ${
+                  activeTab === 'announcements'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+                onClick={() => setActiveTab('announcements')}
+              >
+                Duyurular
+              </button>
+              <button
+                className={`py-2 px-4 font-medium ${
+                  activeTab === 'messages'
+                    ? 'text-blue-600 border-b-2 border-blue-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+                onClick={() => setActiveTab('messages')}
+              >
+                İletişim Mesajları
+              </button>
+            </div>
+            
+            {/* İçerik */}
+            {activeTab === 'announcements' ? (
+              <AnnouncementManager />
+            ) : (
+              <ContactMessageManager />
+            )}
           </div>
         )}
       </div>
