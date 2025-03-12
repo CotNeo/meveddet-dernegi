@@ -128,4 +128,4 @@ Bu proje [MIT](LICENSE) lisansı altında lisanslanmıştır.
 
 ## İletişim
 
-Sorularınız veya geri bildirimleriniz için [email@example.com](mailto:email@example.com) adresine e-posta gönderebilirsiniz.
+Sorularınız veya geri bildirimleriniz için [email@example.com](mailto:furkanaliakar@gmail.com) adresine e-posta gönderebilirsiniz.
