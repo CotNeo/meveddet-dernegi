@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "analyze": "ANALYZE=true next build",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "netlify-fix": "node netlify-fix.mjs",
+    "deploy": "npm run build && npm run netlify-fix && netlify deploy --prod"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

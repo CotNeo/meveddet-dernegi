@@ -8,6 +8,7 @@ const nextConfig = {
         hostname: 'via.placeholder.com',
       },
     ],
+    unoptimized: true,
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
@@ -17,6 +18,7 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
+  assetPrefix: process.env.NODE_ENV === 'production' ? 'https://meveddet-dernegi.netlify.app' : '',
 };
 
 module.exports = nextConfig; 
