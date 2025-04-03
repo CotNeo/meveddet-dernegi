@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
   openGraph: {
     title: "Meveddet | Meveddet Derneği",
     description: "Meveddet Derneği resmi web sitesi. Meveddet, tasavvuf, manevi değerler, kültürel miras, sosyal sorumluluk, yardım, bağış ve etkinlikler hakkında bilgi alın.",
@@ -30,11 +35,20 @@ export const metadata: Metadata = {
     siteName: "Meveddet Derneği",
     locale: "tr_TR",
     type: "website",
+    images: [
+      {
+        url: '/logo.png',
+        width: 800,
+        height: 600,
+        alt: 'Meveddet Derneği Logo',
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Meveddet | Meveddet Derneği",
     description: "Meveddet Derneği resmi web sitesi. Meveddet, tasavvuf, manevi değerler, kültürel miras, sosyal sorumluluk, yardım, bağış ve etkinlikler hakkında bilgi alın.",
+    images: ['/logo.png'],
   },
   robots: {
     index: true,
@@ -55,6 +69,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
+      <head>
+        <link rel="icon" href="/logo.png" type="image/png" />
+      </head>
       <body className={inter.className}>
         <div className="flex flex-col min-h-screen bg-white">
           <Navbar />
