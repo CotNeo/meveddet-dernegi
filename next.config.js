@@ -18,19 +18,37 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
-  // Add custom favicon configuration
+  // Add custom headers
   async headers() {
     return [
       {
-        source: '/favicon.ico',
+        source: '/:path*',
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
           },
         ],
       },
     ];
+  },
+  // Environment variables
+  env: {
+    SITE_URL: process.env.SITE_URL || 'https://www.meveddetdernegi.org',
+  },
+  // Experimental features
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['meveddetdernegi.org'],
+    },
   },
 };
 

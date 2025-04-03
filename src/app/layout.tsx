@@ -24,7 +24,10 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: '/logo.png',
+    icon: [
+      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/logo.png', sizes: '16x16', type: 'image/png' },
+    ],
     shortcut: '/logo.png',
     apple: '/logo.png',
   },
@@ -49,6 +52,7 @@ export const metadata: Metadata = {
     title: "Meveddet | Meveddet Derneği",
     description: "Meveddet Derneği resmi web sitesi. Meveddet, tasavvuf, manevi değerler, kültürel miras, sosyal sorumluluk, yardım, bağış ve etkinlikler hakkında bilgi alın.",
     images: ['/logo.png'],
+    creator: "@meveddetdernegi",
   },
   robots: {
     index: true,
@@ -59,6 +63,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  verification: {
+    google: "your-google-site-verification-code",
   },
 };
 
@@ -71,6 +78,14 @@ export default function RootLayout({
     <html lang="tr">
       <head>
         <link rel="icon" href="/logo.png" type="image/png" />
+        <meta name="author" content="Meveddet Derneği" />
+        <meta name="copyright" content="Meveddet Derneği" />
+        <meta name="theme-color" content="#7C3AED" />
+        <meta name="generator" content="Meveddet Derneği" />
+        <meta name="distribution" content="Meveddet Derneği" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="rating" content="general" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={inter.className}>
         <div className="flex flex-col min-h-screen bg-white">
