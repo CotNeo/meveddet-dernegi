@@ -18,7 +18,6 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
-  assetPrefix: process.env.NODE_ENV === 'production' ? 'https://meveddet-dernegi.netlify.app' : '',
 };
 
 module.exports = nextConfig; 

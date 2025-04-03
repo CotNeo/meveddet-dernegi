@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import FadeIn from '@/components/animations/FadeIn';
-import AnimatedSection from '@/components/animations/AnimatedSection';
 import ClientOnly from '@/components/ClientOnly';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';

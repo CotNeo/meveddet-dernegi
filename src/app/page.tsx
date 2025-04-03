@@ -6,9 +6,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { announcementService } from '@/services/announcementService';
 import { Announcement } from '@/models/Announcement';
-import FadeIn from '@/components/animations/FadeIn';
-import AnimatedSection from '@/components/animations/AnimatedSection';
-import ClientOnly from '@/components/ClientOnly';
 
 export default function HomePage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);

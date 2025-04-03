@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     };
     announcements.push(newAnnouncement);
     return NextResponse.json(newAnnouncement, { status: 201 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Duyuru eklenirken bir hata oluştu' }, { status: 500 });
   }
 } 
