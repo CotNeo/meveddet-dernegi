@@ -2,19 +2,23 @@
 module.exports = {
   siteUrl: process.env.SITE_URL || 'https://www.meveddetdernegi.org',
   generateRobotsTxt: true,
+  generateIndexSitemap: false,
+  changefreq: 'daily',
+  priority: 0.7,
+  sitemapSize: 7000,
+  exclude: ['/admin/*', '/api/*'],
   robotsTxtOptions: {
-    policies: [
-      {
-        userAgent: '*',
-        allow: '/',
-      },
-      {
-        userAgent: '*',
-        disallow: ['/admin'],
-      },
+    additionalSitemaps: [
+      'https://www.meveddetdernegi.org/sitemap.xml',
     ],
   },
-  exclude: ['/admin', '/admin/*'],
-  generateIndexSitemap: false,
-  outDir: 'public',
-}; 
+  transform: async (config, path) => {
+    return {
+      loc: path,
+      changefreq: config.changefreq,
+      priority: path === '/' ? 1.0 : config.priority,
+      lastmod: new Date().toISOString(),
+      alternateRefs: config.alternateRefs ?? [],
+    }
+  },
+} 

@@ -1,101 +1,132 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { announcementService } from '@/services/announcementService';
+import { Announcement } from '@/models/Announcement';
 import FadeIn from '@/components/animations/FadeIn';
 import AnimatedSection from '@/components/animations/AnimatedSection';
-import HoverScale from '@/components/animations/HoverScale';
 import ClientOnly from '@/components/ClientOnly';
 
-export default function Home() {
+export default function HomePage() {
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const data = await announcementService.getActive();
+        setAnnouncements(data);
+      } catch (error) {
+        console.error('Duyurular yüklenirken hata:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative bg-purple-600 text-white py-20">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-800 opacity-90"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-          <ClientOnly>
-            <FadeIn direction="up" duration={0.8}>
-              <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">
-                Meveddet Derneği
-              </h1>
-            </FadeIn>
-          </ClientOnly>
-          
-          <ClientOnly>
-            <FadeIn direction="up" delay={0.2} duration={0.8}>
-              <p className="text-xl md:text-2xl text-center mb-10 max-w-3xl">
-              Meveddet Derneği olarak, tasavvuf tarihini ve kültürünü araştırarak, 
-              doğru kaynaklarla tanıtmak ve gelecek nesillere aktarmak için çalışıyoruz.
-               Sevgi, saygı ve muhabbet temellerine dayanan bir anlayışla, manevi mirasımızın korunmasını sağlamayı amaçlıyoruz.
-              </p>
-            </FadeIn>
-          </ClientOnly>
-          
-          <ClientOnly>
-            <FadeIn direction="up" delay={0.4} duration={0.8}>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <HoverScale>
-                  <Link
-                    href="/hakkimizda"
-                    className="bg-white text-purple-600 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition duration-300"
-                  >
-                    Hakkımızda
-                  </Link>
-                </HoverScale>
-                <HoverScale>
-                  <Link
-                    href="/iletisim"
-                    className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-600 px-6 py-3 rounded-md font-medium transition duration-300"
-                  >
-                    Bize Ulaşın
-                  </Link>
-                </HoverScale>
-              </div>
-            </FadeIn>
-          </ClientOnly>
+      <section className="relative h-[600px] flex items-center justify-center bg-gradient-to-r from-purple-900 via-purple-800 to-purple-900">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-purple-900 bg-opacity-30" />
+        </div>
+        <div className="relative z-10 text-center text-white px-4">
+          <motion.h1 
+            className="text-5xl md:text-6xl font-bold mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            Meveddet Derneği
+          </motion.h1>
+          <motion.p 
+            className="text-xl md:text-2xl max-w-3xl mx-auto mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            Tasavvuf tarihini ve kültürünü araştırıp tanıtmak ve korunmasını sağlamak amacıyla yola çıktık.
+            <br />
+            <span className="italic">Hayırlar feth ola, şerler def ola...</span>
+          </motion.p>
+          <motion.div
+            className="mt-8 flex gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <Link
+              href="/hakkimizda"
+              className="inline-block bg-white text-purple-900 px-8 py-3 rounded-full font-semibold hover:bg-purple-100 transition-colors duration-300"
+            >
+              Bizi Tanıyın
+            </Link>
+            <Link
+              href="/iletisim"
+              className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-purple-900 transition-colors duration-300"
+            >
+              İletişim
+            </Link>
+          </motion.div>
         </div>
       </section>
 
-      {/* Misyon ve Vizyon */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ClientOnly>
-            <AnimatedSection>
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Misyonumuz ve Vizyonumuz</h2>
-                <div className="w-20 h-1 bg-purple-600 mx-auto"></div>
-              </div>
-            </AnimatedSection>
-          </ClientOnly>
+      {/* Duyurular Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Duyurular</h2>
+            <div className="w-24 h-1 bg-purple-600 mx-auto"></div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            <ClientOnly>
-              <AnimatedSection delay={0.2}>
-                <div className="bg-white p-8 rounded-lg shadow-md">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Misyonumuz</h3>
-                  <p className="text-gray-600">
-                  Meveddet Derneği olarak, tasavvuf tarihini ve kültürünü araştırarak, 
-                  doğru kaynaklarla tanıtmak ve gelecek nesillere aktarmak için çalışıyoruz.
-                   Sevgi, saygı ve muhabbet temellerine dayanan bir anlayışla, manevi mirasımızın korunmasını sağlamayı amaçlıyoruz.
-                  </p>
-                </div>
-              </AnimatedSection>
-            </ClientOnly>
-
-            <ClientOnly>
-              <AnimatedSection delay={0.4}>
-                <div className="bg-white p-8 rounded-lg shadow-md">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Vizyonumuz</h3>
-                  <p className="text-gray-600">
-                  Tasavvufun evrensel değerlerini günümüz dünyasına taşıyan,
-                  sevgi ve hoşgörüyü merkeze alan bir topluluk oluşturmak. 
-                  Kültürel ve akademik çalışmalarla Meveddet ruhunu yaşatmak, 
-                  toplumda manevi derinliği artırmak ve tasavvufun ışığını daha geniş kitlelere ulaştırmak en büyük hedefimizdir.
-                  </p>
-                </div>
-              </AnimatedSection>
-            </ClientOnly>
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
+            </div>
+          ) : announcements.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {announcements.map((announcement) => (
+                <motion.div
+                  key={announcement.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                >
+                  {announcement.image && (
+                    <div className="relative h-48">
+                      <Image
+                        src={announcement.image}
+                        alt={announcement.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6 flex flex-col h-full">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{announcement.title}</h3>
+                    <p className="text-gray-600 mb-4 flex-grow">{announcement.summary}</p>
+                    <div className="text-sm text-gray-500">{announcement.date}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-gray-600 py-12">
+              Henüz duyuru bulunmamaktadır.
+            </div>
+          )}
         </div>
       </section>
     </div>

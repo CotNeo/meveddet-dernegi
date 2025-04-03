@@ -11,6 +11,7 @@ const Navbar = () => {
   const navigation = [
     { name: "Ana Sayfa", href: "/" },
     { name: "Hakkımızda", href: "/hakkimizda" },
+    { name: "Faaliyetler", href: "/faaliyetler" },
     { name: "Duyurular", href: "/duyurular" },
     { name: "İletişim", href: "/iletisim" },
   ];
@@ -27,7 +28,7 @@ const Navbar = () => {
               height={40} 
               className="mr-2"
             />
-            <span className="text-xl font-bold text-blue-600">Meveddet</span>
+            <span className="text-xl font-bold text-purple-600">Meveddet</span>
           </Link>
           
           <div className="hidden md:flex space-x-8">
@@ -35,7 +36,7 @@ const Navbar = () => {
               <Link 
                 key={item.name}
                 href={item.href} 
-                className="text-gray-700 hover:text-blue-600 transition duration-300"
+                className="text-gray-700 hover:text-purple-600 transition duration-300"
               >
                 {item.name}
               </Link>
@@ -63,7 +64,7 @@ const Navbar = () => {
             <Link
               key={item.name}
               href={item.href}
-              className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+              className="text-gray-700 hover:text-purple-600 block px-3 py-2 rounded-md text-base font-medium"
               onClick={() => setIsOpen(false)}
             >
               {item.name}

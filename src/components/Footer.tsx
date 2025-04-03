@@ -1,11 +1,13 @@
 'use client';
 
-import { FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaTwitter, FaInstagram, FaFacebook, FaYoutube } from 'react-icons/fa';
 import Link from 'next/link';
 import Image from 'next/image';
 
 const Footer = () => {
   const socialLinks = [
+    { name: 'Facebook', icon: FaFacebook, href: 'https://www.facebook.com/people/Meveddet-Tarih-ve-K%C3%BClt%C3%BCr-Ara%C5%9Ft%C4%B1rmalar%C4%B1-Derne%C4%9Fi/61571926373167/?_rdr' },
+    { name: 'YouTube', icon: FaYoutube, href: 'https://www.youtube.com/channel/UCAMYw9sMwGKI13OkLRhSNnQ' },
     { name: 'Twitter', icon: FaTwitter, href: 'https://twitter.com/meveddetdernegi' },
     { name: 'Instagram', icon: FaInstagram, href: 'https://www.instagram.com/meveddet_dernegi/' },
   ];
@@ -19,7 +21,6 @@ const Footer = () => {
             <div className="flex items-center mb-4">
               <Image 
                 src="/logo_transparent.png"
-                 
                 alt="Meveddet Derneği Logo" 
                 width={50} 
                 height={50} 
@@ -28,7 +29,7 @@ const Footer = () => {
               <h3 className="text-xl font-bold">Meveddet Derneği</h3>
             </div>
             <p className="text-gray-300">
-            Tasavvufun sevgi ve muhabbet temelli mirasını araştırmak, korumak ve aktarmak.
+              Tasavvufun sevgi ve muhabbet temelli mirasını araştırmak, korumak ve aktarmak.
             </p>
           </div>
 
