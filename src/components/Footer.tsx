@@ -38,8 +38,18 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4">Hızlı Bağlantılar</h3>
             <ul className="space-y-2">
               <li>
+                <Link href="/" className="text-gray-300 hover:text-white transition">
+                  Ana Sayfa
+                </Link>
+              </li>
+              <li>
                 <Link href="/hakkimizda" className="text-gray-300 hover:text-white transition">
                   Hakkımızda
+                </Link>
+              </li>
+              <li>
+                <Link href="/faaliyetler" className="text-gray-300 hover:text-white transition">
+                  Faaliyetler
                 </Link>
               </li>
               <li>
