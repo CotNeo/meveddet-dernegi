@@ -16,11 +16,14 @@ Bu proje, Meveddet Derneği için Next.js, TypeScript ve Tailwind CSS kullanıla
 
 ## Teknolojiler
 
-- Next.js 14
+- Next.js 15.2.1
+- React 19.0.0
 - TypeScript
-- Tailwind CSS
+- Tailwind CSS 4
 - Framer Motion (animasyonlar için)
-- React Hook Form (form yönetimi)
+- Axios (HTTP istekleri için)
+- Nodemailer (e-posta gönderimi için)
+- React Icons (ikonlar için)
 
 ## Gereksinimler
 
@@ -74,24 +77,17 @@ vercel
 
 ```
 meveddet-dernegi/
-├── public/
-│   ├── images/        # Görsel dosyaları
-│   └── fonts/         # Font dosyaları
+├── public/           # Statik dosyalar
 ├── src/
-│   ├── app/          
-│   │   ├── page.tsx              # Ana sayfa
-│   │   ├── hakkimizda/          # Hakkımızda sayfası
-│   │   ├── faaliyetler/         # Faaliyetler sayfası
-│   │   ├── duyurular/           # Duyurular sayfası
-│   │   └── iletisim/            # İletişim sayfası
-│   ├── components/   
-│   │   ├── animations/          # Animasyon bileşenleri
-│   │   ├── layout/              # Layout bileşenleri
-│   │   └── ui/                  # UI bileşenleri
-│   ├── models/                  # Veri modelleri
-│   └── services/               # API servisleri
-├── tailwind.config.js          # Tailwind yapılandırması
-└── next.config.js             # Next.js yapılandırması
+│   ├── app/         # Next.js 13+ App Router sayfaları
+│   ├── components/  # React bileşenleri
+│   ├── models/      # Veri modelleri
+│   ├── services/    # API servisleri
+│   └── utils/       # Yardımcı fonksiyonlar
+├── data/            # Statik veri dosyaları
+├── tailwind.config.js
+├── next.config.js
+└── package.json
 ```
 
 ## Sayfalar
@@ -106,7 +102,7 @@ meveddet-dernegi/
 
 1. Renk şeması `tailwind.config.js` dosyasından özelleştirilebilir
 2. Font ailesi `next.config.js` ve ilgili CSS dosyalarından değiştirilebilir
-3. Animasyonlar `components/animations` klasöründen yönetilebilir
+3. Animasyonlar Framer Motion ile yönetilebilir
 
 ## Performans Optimizasyonları
 

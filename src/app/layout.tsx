@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CookieBanner from "@/components/CookieBanner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,14 @@ export const metadata: Metadata = {
     icon: [
       { url: '/logo.png', sizes: '32x32', type: 'image/png' },
       { url: '/logo.png', sizes: '16x16', type: 'image/png' },
+      { url: '/logo.png', sizes: '48x48', type: 'image/png' },
+      { url: '/logo.png', sizes: '72x72', type: 'image/png' },
+      { url: '/logo.png', sizes: '96x96', type: 'image/png' },
+      { url: '/logo.png', sizes: '144x144', type: 'image/png' },
+      { url: '/logo.png', sizes: '192x192', type: 'image/png' },
+      { url: '/logo.png', sizes: '256x256', type: 'image/png' },
+      { url: '/logo.png', sizes: '384x384', type: 'image/png' },
+      { url: '/logo.png', sizes: '512x512', type: 'image/png' },
     ],
     shortcut: '/logo.png',
     apple: '/logo.png',
@@ -67,6 +76,10 @@ export const metadata: Metadata = {
   verification: {
     google: "your-google-site-verification-code",
   },
+  other: {
+    "msapplication-TileColor": "#7C3AED",
+    "msapplication-config": "/browserconfig.xml",
+  },
 };
 
 export default function RootLayout({
@@ -78,9 +91,19 @@ export default function RootLayout({
     <html lang="tr">
       <head>
         <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="shortcut icon" href="/logo.png" type="image/png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="72x72" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="144x144" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="256x256" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="384x384" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/logo.png" />
         <meta name="author" content="Meveddet Derneği" />
         <meta name="copyright" content="Meveddet Derneği" />
-        <meta name="theme-color" content="#7C3AED" />
         <meta name="generator" content="Meveddet Derneği" />
         <meta name="distribution" content="Meveddet Derneği" />
         <meta name="revisit-after" content="7 days" />
@@ -93,6 +116,7 @@ export default function RootLayout({
           <main className="flex-1 pt-16">{children}</main>
           <WhatsAppButton />
           <Footer />
+          <CookieBanner />
         </div>
       </body>
     </html>
