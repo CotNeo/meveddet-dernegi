@@ -317,23 +317,16 @@ export default function Faaliyetler() {
                   transition={{ duration: 0.6, delay: 0.6 }}
                   className="mt-6 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow duration-300"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    {[
-                      { label: "Tarih", value: "10 Nisan 2025" },
-                      { label: "Saat", value: "15:00" },
-                      { label: "Yer", value: "Bursa Mevlevîhanesi ve Müzesi" }
-                    ].map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.1 * index + 0.6 }}
-                        className="hover:bg-gray-50 p-2 rounded-lg transition-colors duration-300"
-                      >
-                        <span className="block text-gray-500 text-sm">{item.label}</span>
-                        <span className="font-medium">{item.value}</span>
-                      </motion.div>
-                    ))}
+                  <div className="text-center">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.6 }}
+                      className="hover:bg-gray-50 p-2 rounded-lg transition-colors duration-300"
+                    >
+                      <span className="block text-gray-500 text-sm">Tarih</span>
+                      <span className="font-medium">10 Nisan 2025</span>
+                    </motion.div>
                   </div>
                 </motion.div>
               </div>
