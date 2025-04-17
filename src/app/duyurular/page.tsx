@@ -75,34 +75,39 @@ export default function AnnouncementsPage() {
             {announcements.map((announcement, index) => (
               <ClientOnly key={announcement.id}>
                 <AnimatedSection delay={index * 0.2}>
-                  <Link href={`/duyurular/${announcement.id}`}>
-                    <motion.div 
-                      className="bg-white p-6 rounded-lg shadow-md border border-gray-100 cursor-pointer hover:shadow-lg"
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8 }}
-                      whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-                    >
-                      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
-                        <div className="flex items-center">
-                          {announcement.image && (
-                            <div className="relative w-16 h-16 mr-4">
-                              <Image
-                                src={announcement.image}
-                                alt={announcement.title}
-                                fill
-                                className="object-cover rounded-lg"
-                              />
-                            </div>
-                          )}
-                          <h2 className="text-2xl font-bold text-gray-900">{announcement.title}</h2>
-                        </div>
-                        <div className="text-sm text-gray-500 mt-2 md:mt-0">{announcement.date}</div>
+                  <motion.div 
+                    className="bg-white p-6 rounded-lg shadow-md border border-gray-100"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                  >
+                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        {announcement.image && (
+                          <div className="relative w-16 h-16 mr-4">
+                            <Image
+                              src={announcement.image}
+                              alt={announcement.title}
+                              fill
+                              className="object-cover rounded-lg"
+                            />
+                          </div>
+                        )}
+                        <h2 className="text-2xl font-bold text-gray-900">{announcement.title}</h2>
                       </div>
-                      <p className="text-gray-600">{announcement.summary}</p>
-                    </motion.div>
-                  </Link>
+                      <div className="text-sm text-gray-500 mt-2 md:mt-0">
+                        {new Date(announcement.date).toLocaleDateString('tr-TR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </div>
+                    </div>
+                    <div className="prose max-w-none text-gray-700">
+                      {announcement.content}
+                    </div>
+                  </motion.div>
                 </AnimatedSection>
               </ClientOnly>
             ))}

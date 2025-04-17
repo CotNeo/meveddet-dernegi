@@ -39,7 +39,6 @@ export default function Faaliyetler() {
           </div>
         </FadeIn>
       </ClientOnly>
-
       {/* Nevruz-i Sultani */}
       <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
@@ -158,6 +157,157 @@ export default function Faaliyetler() {
                     {[
                       { label: "Tarih", value: "22 Mart Cumartesi" },
                       { label: "Saat", value: "15:30" },
+                      { label: "Yer", value: "Bursa Mevlevîhanesi ve Müzesi" }
+                    ].map((item, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, delay: 0.1 * index + 0.6 }}
+                        className="hover:bg-gray-50 p-2 rounded-lg transition-colors duration-300"
+                      >
+                        <span className="block text-gray-500 text-sm">{item.label}</span>
+                        <span className="font-medium">{item.value}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Nevruz-i Sultani Videoları */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Nevruz-i Sultani Videoları</h2>
+            <div className="w-16 h-0.5 bg-purple-600 mx-auto"></div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+          >
+            <div className="aspect-video w-full">
+              <iframe
+                src="https://www.youtube.com/embed/videoseries?list=PLY3SufQLgEGMz_VkuNkzPhGJp9ZcIN6Ii"
+                title="Nevruz-i Sultani Playlist"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+            <div className="p-6 bg-gray-50">
+              <motion.h3 
+                className="text-xl font-semibold text-gray-900 mb-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                NEVRUZ-İ SULTÂNÎ VİDEOLARI
+              </motion.h3>
+              <p className="text-gray-700">
+                Nevruz-i Sultani etkinliklerimizin videolarını buradan izleyebilirsiniz. Tüm videoları oynatma listesinden seçebilir ve izleyebilirsiniz.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+
+      {/* Prof. Dr. Hüseyin Hatemi Söyleşi */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Prof. Dr. Hüseyin Hatemi ile Söyleşi</h2>
+            <div className="w-16 h-0.5 bg-purple-600 mx-auto"></div>
+          </motion.div>
+
+          <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            {/* Ana Resim */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="relative w-full group cursor-pointer overflow-hidden"
+              onClick={() => openImageModal('/images/hatemi-main.jpg')}
+            >
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.4 }}
+              >
+                <Image
+                  src="/images/hatemi-main.jpg"
+                  alt="Prof. Dr. Hüseyin Hatemi"
+                  width={800}
+                  height={400}
+                  className="w-full rounded-t-xl max-h-[350px] object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="bg-white/80 text-gray-800 px-4 py-2 rounded-full backdrop-blur-sm">
+                    Görseli Büyüt
+                  </span>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* YouTube Playlist */}
+            <div className="aspect-video w-full">
+              <iframe
+                src="https://www.youtube.com/embed/videoseries?list=PLY3SufQLgEGPmraJgSvM4VDzeu_0JSVZS"
+                title="Prof. Dr. Hüseyin Hatemi Söyleşi Playlist"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+
+            {/* İçerik */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="p-6 bg-gray-50"
+            >
+              <motion.h3 
+                className="text-xl font-semibold text-gray-900 mb-4"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                PROF. DR. HÜSEYİN HATEMİ İLE SÖYLEŞİ
+              </motion.h3>
+              <div className="space-y-4 text-gray-700">
+                <p>
+                  Prof. Dr. Hüseyin Hatemi ile gerçekleştirdiğimiz söyleşi serisini buradan izleyebilirsiniz. 
+                  Tüm videoları oynatma listesinden seçebilir ve izleyebilirsiniz.
+                </p>
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                  className="mt-6 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow duration-300"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    {[
+                      { label: "Tarih", value: "10 Nisan 2025" },
+                      { label: "Saat", value: "15:00" },
                       { label: "Yer", value: "Bursa Mevlevîhanesi ve Müzesi" }
                     ].map((item, index) => (
                       <motion.div
