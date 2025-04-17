@@ -104,9 +104,10 @@ export default function AnnouncementsPage() {
                         })}
                       </div>
                     </div>
-                    <div className="prose max-w-none text-gray-700">
-                      {announcement.content}
-                    </div>
+                    <div 
+                      className="prose max-w-none text-gray-700"
+                      dangerouslySetInnerHTML={{ __html: announcement.content }}
+                    />
                   </motion.div>
                 </AnimatedSection>
               </ClientOnly>

@@ -125,53 +125,66 @@ export default function Faaliyetler() {
                 transition={{ duration: 0.6 }}
               >
                 NEVRUZ-İ SULTÂNÎ PROGRAMI
+                <span className="block text-lg font-normal text-gray-600 mt-2">22 Mart 2025</span>
               </motion.h3>
               <div className="space-y-4 text-gray-700">
-                <ul className="list-none space-y-2">
-                  {[
-                    "Açılış konuşması: Can Ulusoy",
-                    "Osmanlı Tekkelerinde Nevruz: Kahraman Özkök",
-                    "Mevlid-i Ali: İsa Nesim",
-                    "İlahi ve Nefesler: Bursa Mevlevîhanesi Mûsikî Topluluğu",
-                    "Nevruz Sütü İkramı"
-                  ].map((item, index) => (
-                    <li 
-                      key={index}
-                      className="flex items-center space-x-2 hover:bg-white hover:shadow-sm p-2 rounded-lg transition-all duration-300"
-                    >
-                      <motion.div 
-                        className="w-2 h-2 bg-purple-600 rounded-full"
-                        whileHover={{ scale: 1.5 }}
-                      />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
+                <motion.p 
+                  className="mb-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  Nevruz-i Sultânî, Osmanlı İmparatorluğu'nda yılbaşı olarak kabul edilen ve Sultan III. Murad tarafından resmi bayram ilan edilen önemli bir gündür. Bu gün, baharın başlangıcını ve yeni yılın gelişini kutlamak için çeşitli etkinliklerle kutlanır.
+                </motion.p>
+
+                <motion.h3 
+                  className="text-xl font-semibold mb-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  Program İçeriği:
+                </motion.h3>
+                <motion.ul 
+                  className="list-disc pl-6 mb-4 space-y-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
+                  <li>Açılış konuşması: Can Ulusoy</li>
+                  <li>Osmanlı Tekkelerinde Nevruz: Kahraman Özkök</li>
+                  <li>Mevlid-i Ali: İsa Nesim</li>
+                  <li>İlahi ve Nefesler: Bursa Mevlevîhanesi Mûsikî Topluluğu</li>
+                  <li>Nevruz Sütü İkramı</li>
+                </motion.ul>
+
+                <motion.h3 
+                  className="text-xl font-semibold mb-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  Etkinlik Detayları:
+                </motion.h3>
+                <motion.ul 
+                  className="list-disc pl-6 mb-4 space-y-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                >
+                  <li><strong>Tarih:</strong> 22 Mart Cumartesi</li>
+                  <li><strong>Saat:</strong> 15:30</li>
+                  <li><strong>Yer:</strong> Bursa Mevlevîhanesi ve Müzesi</li>
+                </motion.ul>
+
+                <motion.p 
+                  className="italic text-gray-600"
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.6 }}
-                  className="mt-6 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow duration-300"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    {[
-                      { label: "Tarih", value: "22 Mart Cumartesi" },
-                      { label: "Saat", value: "15:30" },
-                      { label: "Yer", value: "Bursa Mevlevîhanesi ve Müzesi" }
-                    ].map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.1 * index + 0.6 }}
-                        className="hover:bg-gray-50 p-2 rounded-lg transition-colors duration-300"
-                      >
-                        <span className="block text-gray-500 text-sm">{item.label}</span>
-                        <span className="font-medium">{item.value}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
+                  Tüm dostlarımızı bekleriz.
+                </motion.p>
               </div>
             </motion.div>
           </div>
