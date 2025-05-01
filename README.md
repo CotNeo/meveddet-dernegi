@@ -7,12 +7,21 @@ Bu proje, Meveddet Derneği için Next.js, TypeScript ve Tailwind CSS kullanıla
 - Modern ve kullanıcı dostu arayüz
 - Responsive tasarım (mobil, tablet ve masaüstü uyumlu)
 - Animasyonlu bileşenler ve geçişler
-- SEO optimizasyonu
+- Gelişmiş SEO optimizasyonu
+  - Dinamik sitemap
+  - Robots.txt yapılandırması
+  - Meta etiketleri optimizasyonu
+  - Sosyal medya paylaşım kartları
+  - Mobil uyumluluk meta etiketleri
 - Hızlı sayfa yükleme
 - Duyuru sistemi
 - İletişim formu
 - Etkinlik takvimi
 - Görsel galeri
+- Erişilebilirlik (a11y) standartlarına uygunluk
+- Çoklu dil desteği (Türkçe)
+- WhatsApp iletişim butonu
+- Çerez politikası bildirimi
 
 ## Teknolojiler
 
@@ -24,6 +33,7 @@ Bu proje, Meveddet Derneği için Next.js, TypeScript ve Tailwind CSS kullanıla
 - Axios (HTTP istekleri için)
 - Nodemailer (e-posta gönderimi için)
 - React Icons (ikonlar için)
+- next-sitemap (SEO optimizasyonu için)
 
 ## Gereksinimler
 
@@ -34,7 +44,7 @@ Bu proje, Meveddet Derneği için Next.js, TypeScript ve Tailwind CSS kullanıla
 
 1. Projeyi klonlayın:
 ```bash
-git clone https://github.com/your-username/meveddet-dernegi.git
+git clone https://github.com/CotNeo/meveddet-dernegi.git
 cd meveddet-dernegi
 ```
 
@@ -80,6 +90,9 @@ meveddet-dernegi/
 ├── public/           # Statik dosyalar
 ├── src/
 │   ├── app/         # Next.js 13+ App Router sayfaları
+│   │   ├── api/     # API rotaları
+│   │   ├── robots.ts # Robots.txt yapılandırması
+│   │   └── sitemap.ts # Sitemap yapılandırması
 │   ├── components/  # React bileşenleri
 │   ├── models/      # Veri modelleri
 │   ├── services/    # API servisleri
@@ -97,24 +110,33 @@ meveddet-dernegi/
 - **Faaliyetler**: Dernek faaliyetleri ve etkinlik takvimi
 - **Duyurular**: Güncel duyurular ve haberler
 - **İletişim**: İletişim formu ve konum bilgileri
+- **Bağış**: Online bağış sayfası
+
+## SEO ve Performans Optimizasyonları
+
+- Dinamik sitemap oluşturma
+- Robots.txt yapılandırması
+- Meta etiketleri optimizasyonu
+- Open Graph ve Twitter Cards desteği
+- Görsel optimizasyonu için Next.js Image komponenti
+- Sayfa yüklemelerinde progresif geliştirme
+- Code splitting ve lazy loading
+- Önbelleğe alma stratejileri
+- Mobil uyumluluk meta etiketleri
+- Erişilebilirlik (a11y) standartlarına uygunluk
 
 ## Özelleştirme
 
 1. Renk şeması `tailwind.config.js` dosyasından özelleştirilebilir
 2. Font ailesi `next.config.js` ve ilgili CSS dosyalarından değiştirilebilir
 3. Animasyonlar Framer Motion ile yönetilebilir
-
-## Performans Optimizasyonları
-
-- Görsel optimizasyonu için Next.js Image komponenti kullanıldı
-- Sayfa yüklemelerinde progresif geliştirme
-- Code splitting ve lazy loading
-- Önbelleğe alma stratejileri
+4. SEO ayarları `src/app/layout.tsx` ve `src/app/sitemap.ts` dosyalarından yapılabilir
 
 ## İletişim
 
 Proje ile ilgili sorularınız için:
 - Email: furkanaliakar@gmail.com
+- GitHub: [CotNeo](https://github.com/CotNeo)
 
 ## Lisans
 
