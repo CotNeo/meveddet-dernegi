@@ -3,8 +3,9 @@ export interface Activity {
   title: string;
   description: string;
   date: string;
-  images: string[];
-  videos: string[];
-  createdAt?: string;
-  updatedAt?: string;
+  image: string;
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+  isActive: boolean;
 } 

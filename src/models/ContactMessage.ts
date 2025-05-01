@@ -4,5 +4,5 @@ export interface ContactMessage {
   email: string;
   message: string;
   createdAt: string;
-  updatedAt?: string;
+  isRead: boolean;
 } 
