@@ -1,5 +1,5 @@
-import { Announcement } from '@/models/Announcement';
 import axios from 'axios';
+import { Announcement } from '@/models/Announcement';
 
 const API_URL = '/api/duyurular';
 
@@ -17,14 +17,22 @@ export const announcementService = {
   },
 
   // Yeni duyuru ekle
-  create: async (announcement: Omit<Announcement, 'id' | 'createdAt' | 'updatedAt'>): Promise<Announcement> => {
-    const response = await axios.post(API_URL, announcement);
+  create: async (formData: FormData): Promise<Announcement> => {
+    const response = await axios.post(API_URL, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return response.data;
   },
 
   // Duyuru güncelle
-  update: async (id: number, announcement: Partial<Announcement>): Promise<Announcement> => {
-    const response = await axios.put(`${API_URL}/${id}`, announcement);
+  update: async (id: number, formData: FormData): Promise<Announcement> => {
+    const response = await axios.put(`${API_URL}/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return response.data;
   },
 

@@ -14,11 +14,11 @@ export default function HomePage() {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const data = await announcementService.getActive();
+        const data = await announcementService.getAll();
         setAnnouncements(data);
-      } catch (error) {
-        console.error('Duyurular yüklenirken hata:', error);
-      } finally {
+        setLoading(false);
+      } catch (err) {
+        console.error('Duyurular yüklenirken hata:', err);
         setLoading(false);
       }
     };
@@ -75,53 +75,75 @@ export default function HomePage() {
       </section>
 
       {/* Duyurular Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Duyurular</h2>
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-black mb-4">Duyurular</h2>
             <div className="w-24 h-1 bg-purple-600 mx-auto"></div>
-          </motion.div>
+          </div>
 
           {loading ? (
-            <div className="flex justify-center items-center h-64">
+            <div className="flex justify-center items-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
             </div>
-          ) : announcements.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {announcements.map((announcement) => (
-                <motion.div
-                  key={announcement.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-                >
-                  {announcement.image && (
-                    <div className="relative h-48">
-                      <Image
-                        src={announcement.image}
-                        alt={announcement.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  )}
-                  <div className="p-6 flex flex-col h-full">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{announcement.title}</h3>
-                    <p className="text-gray-600 mb-4 flex-grow">{announcement.summary}</p>
-                    <div className="text-sm text-gray-500">{announcement.date}</div>
-                  </div>
-                </motion.div>
-              ))}
+          ) : announcements.length === 0 ? (
+            <div className="text-center text-black py-12">
+              Henüz duyuru bulunmamaktadır.
             </div>
           ) : (
-            <div className="text-center text-gray-600 py-12">
-              Henüz duyuru bulunmamaktadır.
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {announcements.slice(0, 3).map((announcement) => (
+                <Link 
+                  href={`/duyurular#${announcement.id}`} 
+                  key={announcement.id}
+                  className="block"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                  >
+                    {announcement.image && (
+                      <div className="relative h-48 w-full">
+                        <Image
+                          src={announcement.image}
+                          alt={announcement.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold text-black mb-2">
+                        {announcement.title}
+                      </h3>
+                      <div className="text-sm text-black mb-4">
+                        {new Date(announcement.date).toLocaleDateString('tr-TR', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </div>
+                      <div 
+                        className="prose text-black line-clamp-3"
+                        dangerouslySetInnerHTML={{ 
+                          __html: announcement.content.replace(/<[^>]*>/g, ' ').substring(0, 150) + '...'
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {announcements.length > 0 && (
+            <div className="text-center mt-12">
+              <Link
+                href="/duyurular"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-colors duration-300"
+              >
+                Tüm Duyurular
+              </Link>
             </div>
           )}
         </div>

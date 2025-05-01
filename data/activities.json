@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "title": "Nevruz-i Sultani",
+    "description": "Osmanlı İmparatorluğu'nda yılbaşı olarak kabul edilen ve Sultan III. Murad tarafından resmi bayram ilan edilen önemli bir gündür.",
+    "date": "2025-03-22",
+    "images": [
+      "/images/nevruz-main.jpg"
+    ],
+    "videos": [
+      "https://www.youtube.com/embed/videoseries?list=PLY3SufQLgEGMz_VkuNkzPhGJp9ZcIN6Ii"
+    ],
+    "createdAt": "2025-05-01T02:21:33.520Z",
+    "updatedAt": "2025-05-01T02:21:33.520Z"
+  },
+  {
+    "id": 2,
+    "title": "Prof. Dr. Hüseyin Hatemi ile Söyleşi",
+    "description": "Prof. Dr. Hüseyin Hatemi ile gerçekleştirdiğimiz söyleşi serisi.",
+    "date": "2025-04-10",
+    "images": [
+      "/images/hatemi-main.jpg"
+    ],
+    "videos": [
+      "https://www.youtube.com/embed/videoseries?list=PLY3SufQLgEGPmraJgSvM4VDzeu_0JSVZS"
+    ],
+    "createdAt": "2025-05-01T02:21:33.520Z",
+    "updatedAt": "2025-05-01T02:21:33.520Z"
+  }
+]

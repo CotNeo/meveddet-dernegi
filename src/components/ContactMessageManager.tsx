@@ -1,161 +1,140 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { contactMessageService } from '../services/contactMessageService';
+import { ContactMessage } from '../models/ContactMessage';
+import Modal from './Modal';
 
-interface ContactMessage {
-  id: string;
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  date: string;
-}
-
-const ContactMessageManager = () => {
+export default function ContactMessageManager() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
-
-  // Mesajları getir
-  const fetchMessages = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get('/api/contact');
-      setMessages(response.data);
-      setError(null);
-    } catch (err) {
-      console.error('Mesajlar yüklenirken hata oluştu:', err);
-      setError('Mesajlar yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Mesaj sil
-  const deleteMessage = async (id: string) => {
-    if (!confirm('Bu mesajı silmek istediğinizden emin misiniz?')) {
-      return;
-    }
-
-    try {
-      await axios.delete(`/api/contact/${id}`);
-      setMessages(messages.filter(message => message.id !== id));
-      if (selectedMessage?.id === id) {
-        setSelectedMessage(null);
-      }
-    } catch (err) {
-      console.error('Mesaj silinirken hata oluştu:', err);
-      alert('Mesaj silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
-    }
-  };
-
-  // Tarih formatla
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('tr-TR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchMessages();
   }, []);
 
+  const fetchMessages = async () => {
+    try {
+      setLoading(true);
+      const data = await contactMessageService.getAll();
+      setMessages(data);
+      setError('');
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      setError('Mesajlar yüklenirken bir hata oluştu');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm('Bu mesajı silmek istediğinizden emin misiniz?')) {
+      try {
+        await contactMessageService.delete(id);
+        fetchMessages();
+        setError('');
+      } catch (error) {
+        console.error('Error deleting message:', error);
+        setError('Mesaj silinirken bir hata oluştu');
+      }
+    }
+  };
+
+  const handleView = (message: ContactMessage) => {
+    setSelectedMessage(message);
+    setIsModalOpen(true);
+  };
+
+  if (loading) {
+    return <div className="text-center">Yükleniyor...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-600 text-center">{error}</div>;
+  }
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">İletişim Mesajları</h2>
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold">İletişim Mesajları</h2>
+      </div>
 
-      {error && (
-        <div className="bg-red-50 text-red-800 p-4 rounded-md mb-6">
-          {error}
-        </div>
-      )}
-
-      {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-        </div>
-      ) : messages.length === 0 ? (
-        <div className="text-center py-10 text-gray-500">
-          Henüz hiç mesaj yok.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Mesaj Listesi */}
-          <div className="md:col-span-1 border rounded-lg overflow-hidden">
-            <div className="bg-gray-50 p-3 border-b">
-              <h3 className="font-medium">Mesajlar ({messages.length})</h3>
-            </div>
-            <div className="overflow-y-auto max-h-[500px]">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`p-3 border-b cursor-pointer hover:bg-gray-50 ${
-                    selectedMessage?.id === message.id ? 'bg-blue-50' : ''
-                  }`}
-                  onClick={() => setSelectedMessage(message)}
+      <div className="grid gap-6">
+        {messages.map((message) => (
+          <div key={message.id} className="bg-white p-6 rounded-lg shadow-md">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-lg font-semibold">{message.name}</h3>
+                <p className="text-gray-600 mt-2">{message.email}</p>
+                <p className="text-gray-600 mt-2">{message.message}</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Tarih: {new Date(message.createdAt).toLocaleDateString('tr-TR')}
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleView(message)}
+                  className="px-3 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
                 >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-medium">{message.name}</h4>
-                      <p className="text-sm text-gray-500">{message.subject}</p>
-                    </div>
-                    <span className="text-xs text-gray-400">
-                      {formatDate(message.date)}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                  Görüntüle
+                </button>
+                <button
+                  onClick={() => handleDelete(message.id)}
+                  className="px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200"
+                >
+                  Sil
+                </button>
+              </div>
             </div>
           </div>
+        ))}
+      </div>
 
-          {/* Mesaj Detayı */}
-          <div className="md:col-span-2 border rounded-lg">
-            {selectedMessage ? (
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-xl font-medium">{selectedMessage.subject}</h3>
-                    <p className="text-gray-500">
-                      {formatDate(selectedMessage.date)}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => deleteMessage(selectedMessage.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                  >
-                    Sil
-                  </button>
-                </div>
-
-                <div className="mb-4">
-                  <p className="font-medium">Gönderen:</p>
-                  <p>{selectedMessage.name} ({selectedMessage.email})</p>
-                </div>
-
-                <div>
-                  <p className="font-medium">Mesaj:</p>
-                  <div className="mt-2 p-3 bg-gray-50 rounded whitespace-pre-wrap">
-                    {selectedMessage.message}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-[300px] text-gray-400">
-                Detayları görmek için bir mesaj seçin
-              </div>
-            )}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedMessage(null);
+        }}
+        title="Mesaj Detayı"
+      >
+        {selectedMessage && (
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-sm font-medium text-gray-700">Ad Soyad</h4>
+              <p className="mt-1">{selectedMessage.name}</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-gray-700">E-posta</h4>
+              <p className="mt-1">{selectedMessage.email}</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-gray-700">Mesaj</h4>
+              <p className="mt-1 whitespace-pre-wrap">{selectedMessage.message}</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-gray-700">Tarih</h4>
+              <p className="mt-1">
+                {new Date(selectedMessage.createdAt).toLocaleDateString('tr-TR')}
+              </p>
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setSelectedMessage(null);
+                }}
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+              >
+                Kapat
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   );
-};
-
-export default ContactMessageManager; 
+} 

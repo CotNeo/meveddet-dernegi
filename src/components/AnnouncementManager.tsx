@@ -1,102 +1,122 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import Modal from './Modal';
+import { Announcement } from '@/models/Announcement';
+import { announcementService } from '@/services/announcementService';
+import Image from 'next/image';
 
-interface Announcement {
-  id: number;
-  title: string;
-  content: string;
-  date: string;
-  summary: string;
-}
-
-const AnnouncementManager = () => {
+export default function AnnouncementManager() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
-  const [formData, setFormData] = useState({
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+  const [formData, setFormData] = useState<Omit<Announcement, 'id'>>({
     title: '',
     content: '',
-    summary: '',
+    date: new Date().toISOString().split('T')[0],
+    image: '',
+    imageFile: undefined
   });
-
-  // Duyuruları yükle
-  const fetchAnnouncements = async () => {
-    try {
-      const response = await axios.get('/api/duyurular');
-      setAnnouncements(response.data);
-      setError(null);
-    } catch (err) {
-      setError('Duyurular yüklenirken bir hata oluştu.');
-      console.error('Duyurular yüklenirken hata:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchAnnouncements();
   }, []);
 
-  // Form değişikliklerini işle
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const fetchAnnouncements = async () => {
+    try {
+      setLoading(true);
+      const data = await announcementService.getAll();
+      setAnnouncements(data);
+      setError(null);
+    } catch (error) {
+      console.error('Error fetching announcements:', error);
+      setError('Duyurular yüklenirken bir hata oluştu');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Yeni duyuru ekle
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData({ ...formData, imageFile: file });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (editingAnnouncement) {
-        // Mevcut duyuruyu güncelle
-        await axios.put(`/api/duyurular/${editingAnnouncement.id}`, {
-          ...formData,
-          date: new Date().toLocaleDateString('tr-TR'),
-        });
-      } else {
-        // Yeni duyuru ekle
-        await axios.post('/api/duyurular', {
-          ...formData,
-          date: new Date().toLocaleDateString('tr-TR'),
-        });
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('content', formData.content);
+      formDataToSend.append('date', formData.date);
+      if (formData.imageFile) {
+        formDataToSend.append('image', formData.imageFile);
       }
-      
-      // Formu sıfırla ve duyuruları yeniden yükle
-      setFormData({ title: '', content: '', summary: '' });
-      setEditingAnnouncement(null);
+
+      if (selectedAnnouncement) {
+        await announcementService.update(selectedAnnouncement.id, formDataToSend);
+      } else {
+        await announcementService.create(formDataToSend);
+      }
+      setIsModalOpen(false);
+      setSelectedAnnouncement(null);
+      setFormData({
+        title: '',
+        content: '',
+        date: new Date().toISOString().split('T')[0],
+        image: '',
+        imageFile: undefined
+      });
+      setPreviewImage(null);
       fetchAnnouncements();
-    } catch (err) {
-      setError('Duyuru kaydedilirken bir hata oluştu.');
-      console.error('Duyuru kaydetme hatası:', err);
+      setError(null);
+    } catch (error) {
+      console.error('Error saving announcement:', error);
+      setError('Duyuru kaydedilirken bir hata oluştu');
     }
   };
 
-  // Duyuru düzenleme
   const handleEdit = (announcement: Announcement) => {
-    setEditingAnnouncement(announcement);
+    setSelectedAnnouncement(announcement);
     setFormData({
       title: announcement.title,
       content: announcement.content,
-      summary: announcement.summary,
+      date: announcement.date,
+      image: announcement.image || '',
+      imageFile: undefined
     });
+    setPreviewImage(announcement.image || null);
+    setIsModalOpen(true);
   };
 
-  // Duyuru silme
   const handleDelete = async (id: number) => {
-    if (!window.confirm('Bu duyuruyu silmek istediğinizden emin misiniz?')) {
-      return;
+    if (window.confirm('Bu duyuruyu silmek istediğinizden emin misiniz?')) {
+      try {
+        await announcementService.delete(id);
+        fetchAnnouncements();
+        setError(null);
+      } catch (error) {
+        console.error('Error deleting announcement:', error);
+        setError('Duyuru silinirken bir hata oluştu');
+      }
     }
+  };
 
-    try {
-      await axios.delete(`/api/duyurular/${id}`);
-      fetchAnnouncements();
-    } catch (err) {
-      setError('Duyuru silinirken bir hata oluştu.');
-      console.error('Duyuru silme hatası:', err);
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   if (loading) {
@@ -107,20 +127,106 @@ const AnnouncementManager = () => {
     );
   }
 
-  return (
-    <div className="space-y-8">
-      {error && (
-        <div className="bg-red-50 text-red-800 p-4 rounded-md">
-          {error}
-        </div>
-      )}
+  if (error) {
+    return (
+      <div className="text-red-600 text-center">{error}</div>
+    );
+  }
 
-      {/* Duyuru Formu */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">
-          {editingAnnouncement ? 'Duyuru Düzenle' : 'Yeni Duyuru Ekle'}
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold">Duyurular</h2>
+        <button
+          onClick={() => {
+            setSelectedAnnouncement(null);
+            setFormData({
+              title: '',
+              content: '',
+              date: new Date().toISOString().split('T')[0],
+              image: '',
+              imageFile: undefined
+            });
+            setIsModalOpen(true);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          Yeni Duyuru Ekle
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6">
+        {announcements.map((announcement) => (
+          <motion.div
+            key={announcement.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white p-6 rounded-lg shadow-md border border-gray-100"
+          >
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">{announcement.title}</h3>
+                {announcement.image && (
+                  <div className="relative w-32 h-32 mt-2">
+                    <Image
+                      src={announcement.image}
+                      alt={announcement.title}
+                      fill
+                      className="object-cover rounded-md"
+                    />
+                  </div>
+                )}
+                <p className="text-sm text-gray-500 mt-1">
+                  {new Date(announcement.date).toLocaleDateString('tr-TR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEdit(announcement)}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  title="Duyuruyu Düzenle"
+                  aria-label="Duyuruyu Düzenle"
+                >
+                  <FiEdit2 className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => handleDelete(announcement.id)}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                  title="Duyuruyu Sil"
+                  aria-label="Duyuruyu Sil"
+                >
+                  <FiTrash2 className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="prose max-w-none text-gray-700">
+              {announcement.content}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedAnnouncement(null);
+          setFormData({
+            title: '',
+            content: '',
+            date: new Date().toISOString().split('T')[0],
+            image: '',
+            imageFile: undefined
+          });
+          setPreviewImage(null);
+        }}
+        title={selectedAnnouncement ? 'Duyuruyu Düzenle' : 'Yeni Duyuru Ekle'}
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700">
               Başlık
@@ -130,22 +236,7 @@ const AnnouncementManager = () => {
               id="title"
               name="title"
               value={formData.title}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="summary" className="block text-sm font-medium text-gray-700">
-              Özet
-            </label>
-            <input
-              type="text"
-              id="summary"
-              name="summary"
-              value={formData.summary}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
@@ -158,76 +249,73 @@ const AnnouncementManager = () => {
             <textarea
               id="content"
               name="content"
-              rows={6}
               value={formData.content}
-              onChange={handleChange}
+              onChange={handleInputChange}
+              required
+              rows={6}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+              Tarih
+            </label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value={formData.date}
+              onChange={handleInputChange}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
-          <div className="flex gap-4">
-            <button
-              type="submit"
-              className="flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              {editingAnnouncement ? 'Güncelle' : 'Ekle'}
-            </button>
-            {editingAnnouncement && (
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingAnnouncement(null);
-                  setFormData({ title: '', content: '', summary: '' });
-                }}
-                className="flex-1 py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                İptal
-              </button>
+          <div>
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+              Görsel
+            </label>
+            <input
+              type="file"
+              id="image"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              className="mt-1 block w-full"
+            />
+            {previewImage && (
+              <div className="mt-2 relative w-32 h-32">
+                <Image
+                  src={previewImage}
+                  alt="Önizleme"
+                  fill
+                  className="object-cover rounded-md"
+                />
+              </div>
             )}
           </div>
-        </form>
-      </div>
 
-      {/* Duyuru Listesi */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">Duyurular</h2>
-        <div className="space-y-4">
-          {announcements.map((announcement) => (
-            <div
-              key={announcement.id}
-              className="border border-gray-200 rounded-md p-4 hover:bg-gray-50"
+          <div className="flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                setIsModalOpen(false);
+                setSelectedAnnouncement(null);
+              }}
+              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">{announcement.title}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{announcement.date}</p>
-                  <p className="text-gray-600 mt-2">{announcement.summary}</p>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(announcement)}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    Düzenle
-                  </button>
-                  <button
-                    onClick={() => handleDelete(announcement.id)}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    Sil
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-          {announcements.length === 0 && (
-            <p className="text-gray-500 text-center py-4">Henüz duyuru bulunmuyor.</p>
-          )}
-        </div>
-      </div>
+              İptal
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              {selectedAnnouncement ? 'Güncelle' : 'Kaydet'}
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
-};
-
-export default AnnouncementManager; 
+} 

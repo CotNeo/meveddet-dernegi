@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "Nevruz-i Sultani",
+    "content": "\n          <h3>NEVRUZ-İ SULTÂNÎ PROGRAMI</h3>\n          <p>Nevruz-i Sultânî, Osmanlı İmparatorluğu'nda yılbaşı olarak kabul edilen ve Sultan III. Murad tarafından resmi bayram ilan edilen önemli bir gündür.</p>\n          <h4>Program İçeriği:</h4>\n          <ul>\n            <li>Açılış konuşması: Can Ulusoy</li>\n            <li>Osmanlı Tekkelerinde Nevruz: Kahraman Özkök</li>\n            <li>Mevlid-i Ali: İsa Nesim</li>\n            <li>İlahi ve Nefesler: Bursa Mevlevîhanesi Mûsikî Topluluğu</li>\n            <li>Nevruz Sütü İkramı</li>\n          </ul>\n          <h4>Etkinlik Detayları:</h4>\n          <ul>\n            <li>Tarih: 22 Mart Cumartesi</li>\n            <li>Saat: 15:30</li>\n            <li>Yer: Bursa Mevlevîhanesi ve Müzesi</li>\n          </ul>\n        ",
+    "date": "2025-03-22",
+    "image": "/images/nevruz-main.jpg",
+    "createdAt": "2025-05-01T02:39:35.931Z",
+    "updatedAt": "2025-05-01T02:39:35.931Z"
+  },
+  {
+    "id": 2,
+    "title": "Prof. Dr. Hüseyin Hatemi ile Söyleşi",
+    "content": "\n          <p>Prof. Dr. Hüseyin Hatemi ile gerçekleştirdiğimiz söyleşi serisini sizlerle buluşturuyoruz.</p>\n          <p>Bu değerli söyleşi serisinde, Prof. Dr. Hüseyin Hatemi ile önemli konular üzerine derinlemesine sohbetler gerçekleştireceğiz.</p>\n          <h4>Etkinlik Detayları:</h4>\n          <ul>\n            <li>Tarih: 10 Nisan 2025</li>\n            <li>Yer: Meveddet Derneği Konferans Salonu</li>\n          </ul>\n          <p>Tüm üyelerimiz ve ilgilenenler davetlidir.</p>\n        ",
+    "date": "2025-04-10",
+    "image": "/images/hatemi-main.jpg",
+    "createdAt": "2025-05-01T02:39:35.931Z",
+    "updatedAt": "2025-05-01T02:39:35.931Z"
+  }
+]

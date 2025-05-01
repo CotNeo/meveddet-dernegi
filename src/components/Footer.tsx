@@ -97,7 +97,18 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-300">
-          <p>&copy; {new Date().getFullYear()} Meveddet Derneği. Tüm hakları saklıdır.</p>
+          <p className="mb-2">&copy; {new Date().getFullYear()} Meveddet Derneği. Tüm hakları saklıdır.</p>
+          <p className="text-sm">
+            Geliştirici:{' '}
+            <a
+              href="https://cotneo.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400 hover:text-purple-300 transition-colors duration-300"
+            >
+              cotneo.com
+            </a>
+          </p>
         </div>
       </div>
     </footer>

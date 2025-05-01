@@ -1,27 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { Announcement } from '@/models/Announcement';
 
-// Duyuru için arayüz
-interface Announcement {
-  id: number;
-  title: string;
-  content: string;
-  date: string;
-  summary: string;
-}
-
-// Duyuruların saklanacağı dosya yolu
 const dataFilePath = path.join(process.cwd(), 'data', 'announcements.json');
-
-// Vercel ortamında çalışıp çalışmadığımızı kontrol et
-const isVercel = process.env.VERCEL === '1';
+const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
 
 // Data klasörünü ve dosyayı oluştur
 async function ensureDataFile() {
-  // Vercel ortamında bu işlemi atla
-  if (isVercel) return;
-  
   const dataDir = path.join(process.cwd(), 'data');
   try {
     await fs.access(dataDir);
@@ -34,37 +20,48 @@ async function ensureDataFile() {
   } catch {
     await fs.writeFile(dataFilePath, '[]');
   }
+
+  // Uploads klasörünü oluştur
+  try {
+    await fs.access(uploadsDir);
+  } catch {
+    await fs.mkdir(uploadsDir, { recursive: true });
+  }
 }
 
 // Duyuruları oku
 async function getAnnouncements(): Promise<Announcement[]> {
   await ensureDataFile();
-  
-  // Vercel ortamında varsayılan duyuruları döndür
-  if (isVercel) {
-    return [
-      {
-        id: 1,
-        title: 'Güncel Duyurular',
-        date: ' Mart 2025',
-        summary: 'Açılış.',
-        content: 'Açılış.'
-      },
-      
-    ];
-  }
-  
   const data = await fs.readFile(dataFilePath, 'utf-8');
   return JSON.parse(data);
 }
 
 // Duyuruları kaydet
 async function saveAnnouncements(announcements: Announcement[]) {
-  // Vercel ortamında bu işlemi atla
-  if (isVercel) return;
-  
   await ensureDataFile();
   await fs.writeFile(dataFilePath, JSON.stringify(announcements, null, 2));
+}
+
+// Görseli kaydet
+async function saveImage(file: File): Promise<string> {
+  await ensureDataFile();
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const filename = `${Date.now()}-${file.name}`;
+  const filepath = path.join(uploadsDir, filename);
+  await fs.writeFile(filepath, buffer);
+  return `/uploads/${filename}`;
+}
+
+// Eski görseli sil
+async function deleteImage(imagePath: string) {
+  if (imagePath) {
+    const filepath = path.join(process.cwd(), 'public', imagePath);
+    try {
+      await fs.unlink(filepath);
+    } catch (error) {
+      console.error('Görsel silinirken hata:', error);
+    }
+  }
 }
 
 // URL'den ID parametresini alma yardımcı fonksiyonu
@@ -75,6 +72,7 @@ function getIdFromUrl(request: NextRequest): number {
   return parseInt(idStr);
 }
 
+// Tek bir duyuruyu getir
 export async function GET(request: NextRequest) {
   try {
     const id = getIdFromUrl(request);
@@ -106,6 +104,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Duyuruyu güncelle
 export async function PUT(request: NextRequest) {
   try {
     const id = getIdFromUrl(request);
@@ -117,18 +116,13 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Vercel ortamında güncelleme işlemini engelle
-    if (isVercel) {
-      return NextResponse.json(
-        { error: 'Demo ortamında duyuru güncellenemez.' },
-        { status: 403 }
-      );
-    }
+    const formData = await request.formData();
+    const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
+    const date = formData.get('date') as string;
+    const imageFile = formData.get('image') as File | null;
 
-    const body = await request.json();
-    const { title, content, summary } = body;
-
-    if (!title || !content || !summary) {
+    if (!title || !content || !date) {
       return NextResponse.json(
         { error: 'Tüm alanların doldurulması zorunludur.' },
         { status: 400 }
@@ -145,12 +139,21 @@ export async function PUT(request: NextRequest) {
       );
     }
 
+    let imagePath = announcements[index].image;
+    if (imageFile) {
+      // Eski görseli sil
+      await deleteImage(announcements[index].image || '');
+      // Yeni görseli kaydet
+      imagePath = await saveImage(imageFile);
+    }
+
     const updatedAnnouncement: Announcement = {
       ...announcements[index],
       title,
       content,
-      summary,
-      date: new Date().toLocaleDateString('tr-TR'),
+      date,
+      image: imagePath,
+      updatedAt: new Date().toISOString()
     };
 
     announcements[index] = updatedAnnouncement;
@@ -166,6 +169,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+// Duyuruyu sil
 export async function DELETE(request: NextRequest) {
   try {
     const id = getIdFromUrl(request);
@@ -174,14 +178,6 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json(
         { error: 'Geçersiz duyuru ID.' },
         { status: 400 }
-      );
-    }
-
-    // Vercel ortamında silme işlemini engelle
-    if (isVercel) {
-      return NextResponse.json(
-        { error: 'Demo ortamında duyuru silinemez.' },
-        { status: 403 }
       );
     }
 
@@ -194,6 +190,9 @@ export async function DELETE(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    // Görseli sil
+    await deleteImage(announcements[index].image || '');
 
     announcements.splice(index, 1);
     await saveAnnouncements(announcements);
