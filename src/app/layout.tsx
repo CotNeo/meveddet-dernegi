@@ -9,7 +9,10 @@ import CookieBanner from "@/components/CookieBanner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Meveddet | Meveddet Derneği",
+  title: {
+    default: "Meveddet | Meveddet Derneği",
+    template: "%s | Meveddet Derneği"
+  },
   description: "Meveddet Derneği resmi web sitesi. Meveddet, tasavvuf, manevi değerler, kültürel miras, sosyal sorumluluk, yardım, bağış ve etkinlikler hakkında bilgi alın.",
   keywords: "meveddet, meveddet derneği, tasavvuf, manevi değerler, kültürel miras, sosyal sorumluluk, yardım, bağış, etkinlik, dernek, vakıf, islami kuruluş, dini dernek, manevi dernek, tasavvuf derneği, meveddet vakfı, meveddet derneği istanbul, meveddet derneği etkinlikleri, meveddet derneği duyuruları, meveddet derneği iletişim",
   authors: [{ name: "Meveddet Derneği" }],
@@ -71,14 +74,21 @@ export const metadata: Metadata = {
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
   verification: {
     google: "your-google-site-verification-code",
+    yandex: "your-yandex-verification-code"
   },
   other: {
     "msapplication-TileColor": "#7C3AED",
     "msapplication-config": "/browserconfig.xml",
+    "theme-color": "#7C3AED",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black",
+    "apple-mobile-web-app-title": "Meveddet Derneği",
+    "msvalidate.01": "your-bing-verification-code"
   },
 };
 

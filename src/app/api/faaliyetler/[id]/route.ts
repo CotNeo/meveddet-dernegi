@@ -3,99 +3,155 @@ import fs from 'fs/promises';
 import path from 'path';
 import { Activity } from '@/models/Activity';
 
-const dataFilePath = path.join(process.cwd(), 'data', 'activities.json');
-const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+// Production ortamında tmp klasörünü kullan
+const dataDir = process.env.NODE_ENV === 'production' 
+  ? path.join('/tmp', 'meveddet-data')
+  : path.join(process.cwd(), 'data');
+
+const dataFilePath = path.join(dataDir, 'activities.json');
+const uploadsDir = process.env.NODE_ENV === 'production'
+  ? path.join('/tmp', 'meveddet-uploads')
+  : path.join(process.cwd(), 'public', 'uploads');
 
 // Data klasörünü ve dosyayı oluştur
 async function ensureDataFile() {
-  const dataDir = path.join(process.cwd(), 'data');
   try {
-    await fs.access(dataDir);
-  } catch {
-    await fs.mkdir(dataDir, { recursive: true });
-  }
+    // Data dizinini oluştur
+    await fs.access(dataDir).catch(async () => {
+      await fs.mkdir(dataDir, { recursive: true });
+      console.log('Data dizini oluşturuldu:', dataDir);
+    });
 
-  try {
-    await fs.access(dataFilePath);
-  } catch {
-    await fs.writeFile(dataFilePath, '[]');
-  }
+    // Activities dosyasını oluştur
+    await fs.access(dataFilePath).catch(async () => {
+      await fs.writeFile(dataFilePath, '[]');
+      console.log('Activities dosyası oluşturuldu:', dataFilePath);
+    });
 
-  // Uploads klasörünü oluştur
-  try {
-    await fs.access(uploadsDir);
-  } catch {
-    await fs.mkdir(uploadsDir, { recursive: true });
+    // Uploads dizinini oluştur
+    await fs.access(uploadsDir).catch(async () => {
+      await fs.mkdir(uploadsDir, { recursive: true });
+      console.log('Uploads dizini oluşturuldu:', uploadsDir);
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Data dizini oluşturulurken hata:', error);
+    return false;
   }
 }
 
 // Faaliyetleri oku
 async function getActivities(): Promise<Activity[]> {
-  await ensureDataFile();
-  const data = await fs.readFile(dataFilePath, 'utf-8');
-  return JSON.parse(data);
+  try {
+    const isDataReady = await ensureDataFile();
+    if (!isDataReady) {
+      console.log('Örnek faaliyetler kullanılıyor...');
+      return getSampleActivities();
+    }
+
+    const data = await fs.readFile(dataFilePath, 'utf-8');
+    let activities: Activity[] = [];
+    
+    try {
+      activities = JSON.parse(data);
+    } catch (error) {
+      console.error('JSON parse hatası:', error);
+      return getSampleActivities();
+    }
+
+    if (!Array.isArray(activities) || activities.length === 0) {
+      return getSampleActivities();
+    }
+
+    return activities;
+  } catch (error) {
+    console.error('Faaliyetler okunurken hata:', error);
+    return getSampleActivities();
+  }
+}
+
+// Örnek faaliyetleri getir
+function getSampleActivities(): Activity[] {
+  return [
+    {
+      id: 1,
+      title: "Nevruz-i Sultani",
+      description: "Nevruz-i Sultânî, Osmanlı İmparatorluğu'nda yılbaşı olarak kabul edilen ve Sultan III. Murad tarafından resmi bayram ilan edilen önemli bir gündür.",
+      date: "2025-03-22",
+      image: "/images/nevruz-main.jpg",
+      location: "Bursa Mevlevîhanesi ve Müzesi",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      isActive: true
+    }
+  ];
 }
 
 // Faaliyetleri kaydet
 async function saveActivities(activities: Activity[]) {
-  await ensureDataFile();
-  await fs.writeFile(dataFilePath, JSON.stringify(activities, null, 2));
+  try {
+    const isDataReady = await ensureDataFile();
+    if (!isDataReady) {
+      console.error('Data dizini oluşturulamadı');
+      return false;
+    }
+    
+    await fs.writeFile(dataFilePath, JSON.stringify(activities, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Faaliyetler kaydedilirken hata:', error);
+    return false;
+  }
 }
 
-// Görselleri kaydet
-async function saveImages(files: File[]): Promise<string[]> {
-  await ensureDataFile();
-  const imagePaths: string[] = [];
-  
-  for (const file of files) {
+// Görseli kaydet
+async function saveImage(file: File): Promise<string> {
+  try {
+    const isDataReady = await ensureDataFile();
+    if (!isDataReady) {
+      throw new Error('Uploads dizini oluşturulamadı');
+    }
+
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = `${Date.now()}-${file.name}`;
     const filepath = path.join(uploadsDir, filename);
     await fs.writeFile(filepath, buffer);
-    imagePaths.push(`/uploads/${filename}`);
-  }
-  
-  return imagePaths;
-}
-
-// Eski görselleri sil
-async function deleteImages(imagePaths: string[]) {
-  for (const imagePath of imagePaths) {
-    const filepath = path.join(process.cwd(), 'public', imagePath);
-    try {
-      await fs.unlink(filepath);
-    } catch (error) {
-      console.error('Görsel silinirken hata:', error);
-    }
+    return `/uploads/${filename}`;
+  } catch (error) {
+    console.error('Görsel kaydedilirken hata:', error);
+    throw error;
   }
 }
 
-// URL'den ID parametresini alma yardımcı fonksiyonu
-function getIdFromUrl(request: NextRequest): number {
-  const url = new URL(request.url);
-  const pathParts = url.pathname.split('/');
-  const idStr = pathParts[pathParts.length - 1];
-  return parseInt(idStr);
-}
-
-// GET: Tek bir faaliyeti getir
-export async function GET(request: NextRequest) {
+// Görseli sil
+async function deleteImage(imagePath: string) {
   try {
-    const id = getIdFromUrl(request);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: 'Geçersiz faaliyet ID.' },
-        { status: 400 }
-      );
+    if (!imagePath || !imagePath.startsWith('/uploads/')) {
+      return;
     }
 
+    const filename = imagePath.replace('/uploads/', '');
+    const filepath = path.join(uploadsDir, filename);
+    await fs.unlink(filepath);
+  } catch (error) {
+    console.error('Görsel silinirken hata:', error);
+  }
+}
+
+// Tek bir faaliyet getir
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const resolvedParams = await params;
     const activities = await getActivities();
-    const activity = activities.find(a => a.id === id);
+    const activity = activities.find(a => a.id === parseInt(resolvedParams.id));
 
     if (!activity) {
       return NextResponse.json(
-        { error: 'Faaliyet bulunamadı.' },
+        { error: 'Faaliyet bulunamadı' },
         { status: 404 }
       );
     }
@@ -104,110 +160,118 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Faaliyet getirilirken hata:', error);
     return NextResponse.json(
-      { error: 'Faaliyet getirilirken bir hata oluştu.' },
+      { error: 'Faaliyet getirilirken bir hata oluştu' },
       { status: 500 }
     );
   }
 }
 
-// PUT: Faaliyeti güncelle
-export async function PUT(request: NextRequest) {
+// Faaliyet güncelle
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const id = getIdFromUrl(request);
-    
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: 'Geçersiz faaliyet ID.' },
-        { status: 400 }
-      );
-    }
-
+    const resolvedParams = await params;
     const formData = await request.formData();
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
     const date = formData.get('date') as string;
-    const imageFiles = formData.getAll('images') as File[];
-    const videos = formData.getAll('videos') as string[];
+    const location = formData.get('location') as string;
+    const imageFile = formData.get('image') as File | null;
+    const isActive = formData.get('isActive') === 'true';
 
-    if (!title || !description || !date) {
+    if (!title || !description || !date || !location) {
       return NextResponse.json(
-        { error: 'Tüm alanların doldurulması zorunludur.' },
+        { error: 'Tüm alanların doldurulması zorunludur' },
         { status: 400 }
       );
     }
 
     const activities = await getActivities();
-    const index = activities.findIndex(a => a.id === id);
+    const index = activities.findIndex(a => a.id === parseInt(resolvedParams.id));
 
     if (index === -1) {
       return NextResponse.json(
-        { error: 'Faaliyet bulunamadı.' },
+        { error: 'Faaliyet bulunamadı' },
         { status: 404 }
       );
     }
 
-    // Eski görselleri sil
-    await deleteImages(activities[index].images);
+    let imagePath = activities[index].image;
+    if (imageFile) {
+      // Eski görseli sil
+      await deleteImage(activities[index].image);
+      // Yeni görseli kaydet
+      imagePath = await saveImage(imageFile);
+    }
 
-    // Yeni görselleri kaydet
-    const imagePaths = await saveImages(imageFiles);
-
-    const updatedActivity: Activity = {
+    activities[index] = {
       ...activities[index],
       title,
       description,
       date,
-      images: imagePaths,
-      videos,
-      updatedAt: new Date().toISOString()
+      location,
+      image: imagePath,
+      updatedAt: new Date().toISOString(),
+      isActive
     };
 
-    activities[index] = updatedActivity;
-    await saveActivities(activities);
+    const saved = await saveActivities(activities);
 
-    return NextResponse.json(updatedActivity);
+    if (!saved) {
+      return NextResponse.json(
+        { error: 'Faaliyet güncellenemedi' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(activities[index]);
   } catch (error) {
     console.error('Faaliyet güncellenirken hata:', error);
     return NextResponse.json(
-      { error: 'Faaliyet güncellenirken bir hata oluştu.' },
+      { error: 'Faaliyet güncellenirken bir hata oluştu' },
       { status: 500 }
     );
   }
 }
 
-// DELETE: Faaliyeti sil
-export async function DELETE(request: NextRequest) {
+// Faaliyet sil
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const id = getIdFromUrl(request);
-
-    if (isNaN(id)) {
-      return NextResponse.json(
-        { error: 'Geçersiz faaliyet ID.' },
-        { status: 400 }
-      );
-    }
-
+    const resolvedParams = await params;
     const activities = await getActivities();
-    const index = activities.findIndex(a => a.id === id);
+    const index = activities.findIndex(a => a.id === parseInt(resolvedParams.id));
 
     if (index === -1) {
       return NextResponse.json(
-        { error: 'Faaliyet bulunamadı.' },
+        { error: 'Faaliyet bulunamadı' },
         { status: 404 }
       );
     }
 
-    // Görselleri sil
-    await deleteImages(activities[index].images);
+    // Görseli sil
+    await deleteImage(activities[index].image);
 
+    // Faaliyeti sil
     activities.splice(index, 1);
-    await saveActivities(activities);
+    const saved = await saveActivities(activities);
 
-    return NextResponse.json({ message: 'Faaliyet başarıyla silindi.' });
+    if (!saved) {
+      return NextResponse.json(
+        { error: 'Faaliyet silinemedi' },
+        { status: 500 }
+      );
+    }
+
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error('Faaliyet silinirken hata:', error);
     return NextResponse.json(
-      { error: 'Faaliyet silinirken bir hata oluştu.' },
+      { error: 'Faaliyet silinirken bir hata oluştu' },
       { status: 500 }
     );
   }
